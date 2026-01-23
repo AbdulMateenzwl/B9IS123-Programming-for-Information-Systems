@@ -13,8 +13,22 @@ function sumOfMultiples(f, m) {
     return sum;
 }
 
+function calculate(){
+    const fInput = document.getElementById("fArray").value;
+    const mInput = document.getElementById("mArray").value;
 
-const f = [2, 3];
-const m = [4, 5, 6, 7, 9];
+    const f = fInput.split(',');
+    const m = mInput.split(',');
 
-console.log(sumOfMultiples(f, m)); 
+    for(let i = 0; i< m.length ; i++){
+        m[i]=Number(m[i]);
+    }
+
+    for(let i = 0; i< f.length ; i++){
+        f[i]=Number(f[i]);
+    }
+
+    const result = sumOfMultiples(f,m);
+
+    document.getElementById("result").innerText = "sum of multiples: " + result;
+}
