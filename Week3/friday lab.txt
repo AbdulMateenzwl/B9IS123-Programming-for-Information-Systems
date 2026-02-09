@@ -1,0 +1,415 @@
+╭─   ~ ·········································································································
+╰─❯ ssh -i /home/mateen/key mateen@20.251.154.215
+The authenticity of host '20.251.154.215 (20.251.154.215)' can't be established.
+ED25519 key fingerprint is SHA256:s6aW1DZT55ix7i9Jra01ROuxIUINwMEDjz5zNe7RO/8.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? y
+Please type 'yes', 'no' or the fingerprint: yes
+Warning: Permanently added '20.251.154.215' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 24.04.3 LTS (GNU/Linux 6.14.0-1017-azure x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+ System information as of Fri Feb  6 13:03:43 UTC 2026
+
+  System load:  0.08              Processes:             133
+  Usage of /:   5.6% of 28.02GB   Users logged in:       0
+  Memory usage: 33%               IPv4 address for eth0: 172.16.0.4
+  Swap usage:   0%
+
+Expanded Security Maintenance for Applications is not enabled.
+
+0 updates can be applied immediately.
+
+Enable ESM Apps to receive additional future security updates.
+See https://ubuntu.com/esm or run: sudo pro status
+
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+mateen@test-vm:~$ ls
+mateen@test-vm:~$ pwd
+/home/mateen
+mateen@test-vm:~$ cd /
+mateen@test-vm:/$ wd
+Command 'wd' not found, but can be installed with:
+sudo apt install node-wikibase-cli
+mateen@test-vm:/$ pwd
+/
+mateen@test-vm:/$ ls
+bin                dev   lib                lost+found  opt   run                 snap  tmp
+bin.usr-is-merged  etc   lib.usr-is-merged  media       proc  sbin                srv   usr
+boot               home  lib64              mnt         root  sbin.usr-is-merged  sys   var
+mateen@test-vm:/$ cd /
+mateen@test-vm:/$ sudo apt update
+Hit:1 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+Get:2 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 Packages [15.0 MB]
+Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe Translation-en [5982 kB]
+Get:7 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 Components [3871 kB]
+Get:8 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 c-n-f Metadata [301 kB]
+Get:9 http://azure.archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [269 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble/multiverse Translation-en [118 kB]
+Get:11 http://azure.archive.ubuntu.com/ubuntu noble/multiverse amd64 Components [35.0 kB]
+Get:12 http://azure.archive.ubuntu.com/ubuntu noble/multiverse amd64 c-n-f Metadata [8328 B]
+Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1738 kB]
+Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [324 kB]
+Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [175 kB]
+Get:16 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [16.5 kB]
+Get:17 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1528 kB]
+Get:18 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [313 kB]
+Get:19 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [386 kB]
+Get:20 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [31.9 kB]
+Get:21 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2582 kB]
+Get:22 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [591 kB]
+Get:23 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+Get:24 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [32.1 kB]
+Get:25 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [6816 B]
+Get:26 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:27 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 c-n-f Metadata [496 B]
+Get:28 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [40.4 kB]
+Get:29 http://azure.archive.ubuntu.com/ubuntu noble-backports/main Translation-en [9208 B]
+Get:30 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7308 B]
+Get:31 http://azure.archive.ubuntu.com/ubuntu noble-backports/main amd64 c-n-f Metadata [368 B]
+Get:32 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [29.5 kB]
+Get:33 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe Translation-en [17.9 kB]
+Get:34 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [10.5 kB]
+Get:35 http://azure.archive.ubuntu.com/ubuntu noble-backports/universe amd64 c-n-f Metadata [1444 B]
+Get:36 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+Get:37 http://azure.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 c-n-f Metadata [116 B]
+Get:38 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+Get:39 http://azure.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 c-n-f Metadata [116 B]
+Get:40 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1431 kB]
+Get:41 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [232 kB]
+Get:42 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+Get:43 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [9888 B]
+Get:44 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [929 kB]
+Get:45 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [212 kB]
+Get:46 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Components [74.2 kB]
+Get:47 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [19.9 kB]
+Get:48 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2411 kB]
+Get:49 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [553 kB]
+Get:50 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+Get:51 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [28.8 kB]
+Get:52 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [6492 B]
+Get:53 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [208 B]
+Get:54 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse amd64 c-n-f Metadata [396 B]
+Fetched 39.8 MB in 5s (8488 kB/s)   
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+21 packages can be upgraded. Run 'apt list --upgradable' to see them.
+mateen@test-vm:/$ sudo apt -y install apache2
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  apache2-bin apache2-data apache2-utils libapr1t64 libaprutil1-dbd-sqlite3 libaprutil1-ldap libaprutil1t64 liblua5.4-0 ssl-cert
+Suggested packages:
+  apache2-doc apache2-suexec-pristine | apache2-suexec-custom www-browser
+The following NEW packages will be installed:
+  apache2 apache2-bin apache2-data apache2-utils libapr1t64 libaprutil1-dbd-sqlite3 libaprutil1-ldap libaprutil1t64 liblua5.4-0 ssl-cert
+0 upgraded, 10 newly installed, 0 to remove and 21 not upgraded.
+Need to get 2090 kB of archives.
+After this operation, 8113 kB of additional disk space will be used.
+Get:1 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libapr1t64 amd64 1.7.2-3.1ubuntu0.1 [108 kB]
+Get:2 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libaprutil1t64 amd64 1.6.3-1.1ubuntu7 [91.9 kB]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libaprutil1-dbd-sqlite3 amd64 1.6.3-1.1ubuntu7 [11.2 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libaprutil1-ldap amd64 1.6.3-1.1ubuntu7 [9116 B]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 liblua5.4-0 amd64 5.4.6-3build2 [166 kB]
+Get:6 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 apache2-bin amd64 2.4.58-1ubuntu8.10 [1334 kB]
+Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 apache2-data all 2.4.58-1ubuntu8.10 [163 kB]
+Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 apache2-utils amd64 2.4.58-1ubuntu8.10 [98.1 kB]
+Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 apache2 amd64 2.4.58-1ubuntu8.10 [90.2 kB]
+Get:10 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 ssl-cert all 1.1.2ubuntu1 [17.8 kB]
+Fetched 2090 kB in 0s (10.8 MB/s)     
+Preconfiguring packages ...
+Selecting previously unselected package libapr1t64:amd64.
+(Reading database ... 68452 files and directories currently installed.)
+Preparing to unpack .../0-libapr1t64_1.7.2-3.1ubuntu0.1_amd64.deb ...
+Unpacking libapr1t64:amd64 (1.7.2-3.1ubuntu0.1) ...
+Selecting previously unselected package libaprutil1t64:amd64.
+Preparing to unpack .../1-libaprutil1t64_1.6.3-1.1ubuntu7_amd64.deb ...
+Unpacking libaprutil1t64:amd64 (1.6.3-1.1ubuntu7) ...
+Selecting previously unselected package libaprutil1-dbd-sqlite3:amd64.
+Preparing to unpack .../2-libaprutil1-dbd-sqlite3_1.6.3-1.1ubuntu7_amd64.deb ...
+Unpacking libaprutil1-dbd-sqlite3:amd64 (1.6.3-1.1ubuntu7) ...
+Selecting previously unselected package libaprutil1-ldap:amd64.
+Preparing to unpack .../3-libaprutil1-ldap_1.6.3-1.1ubuntu7_amd64.deb ...
+Unpacking libaprutil1-ldap:amd64 (1.6.3-1.1ubuntu7) ...
+Selecting previously unselected package liblua5.4-0:amd64.
+Preparing to unpack .../4-liblua5.4-0_5.4.6-3build2_amd64.deb ...
+Unpacking liblua5.4-0:amd64 (5.4.6-3build2) ...
+Selecting previously unselected package apache2-bin.
+Preparing to unpack .../5-apache2-bin_2.4.58-1ubuntu8.10_amd64.deb ...
+Unpacking apache2-bin (2.4.58-1ubuntu8.10) ...
+Selecting previously unselected package apache2-data.
+Preparing to unpack .../6-apache2-data_2.4.58-1ubuntu8.10_all.deb ...
+Unpacking apache2-data (2.4.58-1ubuntu8.10) ...
+Selecting previously unselected package apache2-utils.
+Preparing to unpack .../7-apache2-utils_2.4.58-1ubuntu8.10_amd64.deb ...
+Unpacking apache2-utils (2.4.58-1ubuntu8.10) ...
+Selecting previously unselected package apache2.
+Preparing to unpack .../8-apache2_2.4.58-1ubuntu8.10_amd64.deb ...
+Unpacking apache2 (2.4.58-1ubuntu8.10) ...
+Selecting previously unselected package ssl-cert.
+Preparing to unpack .../9-ssl-cert_1.1.2ubuntu1_all.deb ...
+Unpacking ssl-cert (1.1.2ubuntu1) ...
+Setting up ssl-cert (1.1.2ubuntu1) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/ssl-cert.service → /usr/lib/systemd/system/ssl-cert.service.
+Setting up libapr1t64:amd64 (1.7.2-3.1ubuntu0.1) ...
+Setting up liblua5.4-0:amd64 (5.4.6-3build2) ...
+Setting up apache2-data (2.4.58-1ubuntu8.10) ...
+Setting up libaprutil1t64:amd64 (1.6.3-1.1ubuntu7) ...
+Setting up libaprutil1-ldap:amd64 (1.6.3-1.1ubuntu7) ...
+Setting up libaprutil1-dbd-sqlite3:amd64 (1.6.3-1.1ubuntu7) ...
+Setting up apache2-utils (2.4.58-1ubuntu8.10) ...
+Setting up apache2-bin (2.4.58-1ubuntu8.10) ...
+Setting up apache2 (2.4.58-1ubuntu8.10) ...
+Enabling module mpm_event.
+Enabling module authz_core.
+Enabling module authz_host.
+Enabling module authn_core.
+Enabling module auth_basic.
+Enabling module access_compat.
+Enabling module authn_file.
+Enabling module authz_user.
+Enabling module alias.
+Enabling module dir.
+Enabling module autoindex.
+Enabling module env.
+Enabling module mime.
+Enabling module negotiation.
+Enabling module setenvif.
+Enabling module filter.
+Enabling module deflate.
+Enabling module status.
+Enabling module reqtimeout.
+Enabling conf charset.
+Enabling conf localized-error-pages.
+Enabling conf other-vhosts-access-log.
+Enabling conf security.
+Enabling conf serve-cgi-bin.
+Enabling site 000-default.
+Created symlink /etc/systemd/system/multi-user.target.wants/apache2.service → /usr/lib/systemd/system/apache2.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/apache-htcacheclean.service → /usr/lib/systemd/system/apache-htcacheclean.service.
+Processing triggers for ufw (0.36.2-6) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.6) ...
+Scanning processes...                                                                                                                                                        
+Scanning linux images...                                                                                                                                                     
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+mateen@test-vm:/$ sudo snap install --classic certbot
+2026-02-06T13:44:18Z INFO Waiting for automatic snapd restart...
+certbot 5.3.0 from Certbot Project (certbot-eff✓) installed
+mateen@test-vm:/$ sudo ln -s /snap/bin/certbot /usr/local/bin/certbot
+mateen@test-vm:/$ sudo certbot --apache
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Enter email address or hit Enter to skip.
+ (Enter 'c' to cancel): 20093908@mydbs.ie
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Please read the Terms of Service at:
+https://letsencrypt.org/documents/LE-SA-v1.6-August-18-2025.pdf
+You must agree in order to register with the ACME server. Do you agree?
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+(Y)es/(N)o: Y
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Would you be willing, once your first certificate is successfully issued, to
+share your email address with the Electronic Frontier Foundation, a founding
+partner of the Let's Encrypt project and the non-profit organization that
+develops Certbot? We'd like to send you email about our work encrypting the web,
+EFF news, campaigns, and ways to support digital freedom.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+(Y)es/(N)o: Y
+Account registered.
+Please enter the domain name(s) you would like on your certificate (comma and/or
+space separated) (Enter 'c' to cancel): testmateen.norwayeast.cloudapp.azure.com
+Requesting a certificate for testmateen.norwayeast.cloudapp.azure.com
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/testmateen.norwayeast.cloudapp.azure.com/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/testmateen.norwayeast.cloudapp.azure.com/privkey.pem
+This certificate expires on 2026-05-07.
+These files will be updated when the certificate renews.
+Certbot has set up a scheduled task to automatically renew this certificate in the background.
+
+Deploying certificate
+Successfully deployed certificate for testmateen.norwayeast.cloudapp.azure.com to /etc/apache2/sites-available/000-default-le-ssl.conf
+Congratulations! You have successfully enabled HTTPS on https://testmateen.norwayeast.cloudapp.azure.com
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+mateen@test-vm:/$ mkdir -p ~/cron-demo && cd ~/cron-demo && \
+cat << 'EOF' > fetch.js
+const fs = require('fs');
+const https = require('https');
+
+const url = 'https://jsonplaceholder.typicode.com/todos/1';
+const logFile = __dirname + '/data.log';
+
+https.get(url, res => {
+  let data = '';
+  res.on('data', chunk => data += chunk);
+  res.on('end', () => {
+    const log = `[${new Date().toISOString()}] ${data}\n`;
+    fs.appendFileSync(logFile, log);
+  });
+}).on('error', err => {
+  fs.appendFileSync(logFile, `[${new Date().toISOString()}] ERROR: ${err.message}\n`);
+});
+EOF
+mateen@test-vm:~/cron-demo$ sudo apt install node
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+E: Unable to locate package node
+mateen@test-vm:~/cron-demo$ sudo apt install nodejs
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following additional packages will be installed:
+  libcares2 libnode109 node-acorn node-busboy node-cjs-module-lexer node-undici node-xtend nodejs-doc
+Suggested packages:
+  npm
+The following NEW packages will be installed:
+  libcares2 libnode109 node-acorn node-busboy node-cjs-module-lexer node-undici node-xtend nodejs nodejs-doc
+0 upgraded, 9 newly installed, 0 to remove and 21 not upgraded.
+Need to get 16.1 MB of archives.
+After this operation, 70.4 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 libcares2 amd64 1.27.0-1.0ubuntu1 [73.7 kB]
+Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 node-xtend all 4.0.2-3 [3902 B]
+Get:3 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 nodejs amd64 18.19.1+dfsg-6ubuntu5 [306 kB]
+Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 node-acorn all 8.8.1+ds+~cs25.17.7-2 [115 kB]
+Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 node-cjs-module-lexer all 1.2.3+dfsg-1 [32.1 kB]
+Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 node-busboy all 1.6.0+~cs2.6.0-2 [17.3 kB]
+Get:7 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 node-undici all 5.26.3+dfsg1+~cs23.10.12-2 [325 kB]
+Get:8 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 libnode109 amd64 18.19.1+dfsg-6ubuntu5 [11.6 MB]
+Get:9 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 nodejs-doc all 18.19.1+dfsg-6ubuntu5 [3552 kB]
+Fetched 16.1 MB in 1s (20.8 MB/s)    
+Selecting previously unselected package libcares2:amd64.
+(Reading database ... 69175 files and directories currently installed.)
+Preparing to unpack .../0-libcares2_1.27.0-1.0ubuntu1_amd64.deb ...
+Unpacking libcares2:amd64 (1.27.0-1.0ubuntu1) ...
+Selecting previously unselected package node-xtend.
+Preparing to unpack .../1-node-xtend_4.0.2-3_all.deb ...
+Unpacking node-xtend (4.0.2-3) ...
+Selecting previously unselected package nodejs.
+Preparing to unpack .../2-nodejs_18.19.1+dfsg-6ubuntu5_amd64.deb ...
+Unpacking nodejs (18.19.1+dfsg-6ubuntu5) ...
+Selecting previously unselected package node-acorn.
+Preparing to unpack .../3-node-acorn_8.8.1+ds+~cs25.17.7-2_all.deb ...
+Unpacking node-acorn (8.8.1+ds+~cs25.17.7-2) ...
+Selecting previously unselected package node-cjs-module-lexer.
+Preparing to unpack .../4-node-cjs-module-lexer_1.2.3+dfsg-1_all.deb ...
+Unpacking node-cjs-module-lexer (1.2.3+dfsg-1) ...
+Selecting previously unselected package node-busboy.
+Preparing to unpack .../5-node-busboy_1.6.0+~cs2.6.0-2_all.deb ...
+Unpacking node-busboy (1.6.0+~cs2.6.0-2) ...
+Selecting previously unselected package node-undici.
+Preparing to unpack .../6-node-undici_5.26.3+dfsg1+~cs23.10.12-2_all.deb ...
+Unpacking node-undici (5.26.3+dfsg1+~cs23.10.12-2) ...
+Selecting previously unselected package libnode109:amd64.
+Preparing to unpack .../7-libnode109_18.19.1+dfsg-6ubuntu5_amd64.deb ...
+Unpacking libnode109:amd64 (18.19.1+dfsg-6ubuntu5) ...
+Selecting previously unselected package nodejs-doc.
+Preparing to unpack .../8-nodejs-doc_18.19.1+dfsg-6ubuntu5_all.deb ...
+Unpacking nodejs-doc (18.19.1+dfsg-6ubuntu5) ...
+Setting up node-cjs-module-lexer (1.2.3+dfsg-1) ...
+Setting up libcares2:amd64 (1.27.0-1.0ubuntu1) ...
+Setting up nodejs-doc (18.19.1+dfsg-6ubuntu5) ...
+Setting up node-xtend (4.0.2-3) ...
+Setting up node-busboy (1.6.0+~cs2.6.0-2) ...
+Setting up node-undici (5.26.3+dfsg1+~cs23.10.12-2) ...
+Setting up node-acorn (8.8.1+ds+~cs25.17.7-2) ...
+Setting up libnode109:amd64 (18.19.1+dfsg-6ubuntu5) ...
+Setting up nodejs (18.19.1+dfsg-6ubuntu5) ...
+update-alternatives: using /usr/bin/nodejs to provide /usr/bin/js (js) in auto mode
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.6) ...
+Scanning processes...                                                                                                                                                        
+Scanning linux images...                                                                                                                                                     
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+mateen@test-vm:~/cron-demo$ (crontab -l 2>/dev/null; echo "* * * * * /usr/bin/node /home/$USER/cron-demo/fetch.js") | crontab -
+mateen@test-vm:~/cron-demo$ crontab -l
+tail -f ~/cron-demo/data.log
+* * * * * /usr/bin/node /home/mateen/cron-demo/fetch.js
+tail: cannot open '/home/mateen/cron-demo/data.log' for reading: No such file or directory
+tail: no files remaining
+mateen@test-vm:~/cron-demo$ sudo !!
+sudo tail -f ~/cron-demo/data.log
+tail: cannot open '/home/mateen/cron-demo/data.log' for reading: No such file or directory
+tail: no files remaining
+mateen@test-vm:~/cron-demo$ which node
+/usr/bin/node
+mateen@test-vm:~/cron-demo$ crontab -l
+* * * * * /usr/bin/node /home/mateen/cron-demo/fetch.js
+mateen@test-vm:~/cron-demo$ sudo tail -f ~/cron-demo/data.log
+tail: cannot open '/home/mateen/cron-demo/data.log' for reading: No such file or directory
+tail: no files remaining
+mateen@test-vm:~/cron-demo$ /usr/bin/node /home/mateen/cron-demo/fetch.js
+mateen@test-vm:~/cron-demo$ sudo tail -f ~/cron-demo/data.log
+  "id": 1,
+  "title": "delectus aut autem",
+  "completed": false
+}
+[2026-02-06T13:58:15.702Z] {
+  "userId": 1,
+  "id": 1,
+  "title": "delectus aut autem",
+  "completed": false
+}
+[2026-02-06T13:59:01.258Z] {
+  "userId": 1,
+  "id": 1,
+  "title": "delectus aut autem",
+  "completed": false
+}
+[2026-02-06T14:00:01.475Z] {
+  "userId": 1,
+  "id": 1,
+  "title": "delectus aut autem",
+  "completed": false
+}
+^C
+mateen@test-vm:~/cron-demo$ 
+

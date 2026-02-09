@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Number Stats</title>
+</head>
+
+<body>
+
+    <h3>Enter numbers (space separated)</h3>
+    <input type="text" id="numbers">
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="output"></div>
+
+    <script>
+        function calculate() {
+            const input = document.getElementById("numbers").value.trim();
+            const nums = input.split(/\s+/).map(Number);
+
+            if (nums.length === 0 || nums.some(isNaN)) {
+                document.getElementById("output").innerHTML = "Please enter valid numbers.";
+                return;
+            }
+
+            let sum = 0;
+            let product = 1;
+            let min = nums[0];
+            let max = nums[0];
+
+            for (let n of nums) {
+                sum += n;
+                product *= n;
+                if (n < min) min = n;
+                if (n > max) max = n;
+            }
+
+            const avg = sum / nums.length;
+
+            document.getElementById("output").innerHTML = `
+            <p>Sum: ${sum}</p>
+            <p>Average: ${avg}</p>
+            <p>Min: ${min}</p>
+            <p>Max: ${max}</p>
+            <p>Product: ${product}</p>
+      `;
+        }
+    </script>
+
+</body>
+
+</html>
