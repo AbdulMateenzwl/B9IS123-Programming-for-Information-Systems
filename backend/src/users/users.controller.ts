@@ -50,4 +50,11 @@ export class UsersController {
   findById(@Param('id') id: string) {
     return this.usersService.findById(id);
   }
+
+  // PATCH /api/users/:id
+  @Patch(':id')
+  @Roles(UserRole.ADMIN)
+  update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
+    return this.usersService.update(id, dto);
+  }
 }

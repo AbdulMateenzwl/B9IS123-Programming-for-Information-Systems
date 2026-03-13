@@ -1,8 +1,9 @@
-// src/users/dto/create-user.dto.ts
 import {
+  IsBoolean,
   IsEmail,
   IsEnum,
   IsMongoId,
+  IsOptional,
   IsString,
   MinLength,
 } from 'class-validator';
@@ -32,12 +33,28 @@ export class CreateUserDto {
   departmentId: string;
 }
 
-// src/users/dto/update-user.dto.ts
 export class UpdateUserDto {
+  @IsOptional()
+  @IsString()
   firstName?: string;
+
+  @IsOptional()
+  @IsString()
   lastName?: string;
+
+  @IsOptional()
+  @IsString()
   jobTitle?: string;
+
+  @IsOptional()
+  @IsEnum(UserRole)
   role?: UserRole;
+
+  @IsOptional()
+  @IsMongoId()
   departmentId?: string;
+
+  @IsOptional()
+  @IsBoolean()
   isActive?: boolean;
 }

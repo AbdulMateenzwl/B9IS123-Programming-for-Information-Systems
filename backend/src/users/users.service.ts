@@ -42,15 +42,22 @@ export class UsersService {
     if (filters.role) query.role = filters.role;
     if (filters.isActive !== undefined) query.isActive = filters.isActive;
 
-    return this.userModel
-      .find(query)
-      .select('-passwordHash')
-      .lean();
+    return this.userModel.find(query).select('-passwordHash').lean();
   }
 
   async findById(id: string) {
     const user = await this.userModel
       .findById(id)
+      .select('-passwordHash')
+      .lean();
+
+    if (!user) throw new NotFoundException('User not found.');
+    return user;
+  }
+
+  async update(id: string, dto: UpdateUserDto) {
+    const user = await this.userModel
+      .findByIdAndUpdate(id, dto, { new: true })
       .select('-passwordHash')
       .lean();
 
