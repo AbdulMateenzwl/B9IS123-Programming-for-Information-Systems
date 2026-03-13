@@ -28,4 +28,26 @@ export class UsersController {
   create(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto);
   }
+
+  // GET /api/users
+  @Get()
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.FINANCE_OFFICER)
+  findAll(
+    @Query('departmentId') departmentId?: string,
+    @Query('role') role?: string,
+    @Query('isActive') isActive?: string,
+  ) {
+    return this.usersService.findAll({
+      departmentId,
+      role,
+      isActive: isActive !== undefined ? isActive === 'true' : undefined,
+    });
+  }
+
+  // GET /api/users/:id
+  @Get(':id')
+  @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.FINANCE_OFFICER)
+  findById(@Param('id') id: string) {
+    return this.usersService.findById(id);
+  }
 }

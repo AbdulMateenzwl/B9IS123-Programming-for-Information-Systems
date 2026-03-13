@@ -31,4 +31,30 @@ export class UsersService {
     const { passwordHash: _, ...safeUser } = user.toObject();
     return safeUser;
   }
+
+  async findAll(filters: {
+    departmentId?: string;
+    role?: string;
+    isActive?: boolean;
+  }) {
+    const query: any = {};
+    if (filters.departmentId) query.departmentId = filters.departmentId;
+    if (filters.role) query.role = filters.role;
+    if (filters.isActive !== undefined) query.isActive = filters.isActive;
+
+    return this.userModel
+      .find(query)
+      .select('-passwordHash')
+      .lean();
+  }
+
+  async findById(id: string) {
+    const user = await this.userModel
+      .findById(id)
+      .select('-passwordHash')
+      .lean();
+
+    if (!user) throw new NotFoundException('User not found.');
+    return user;
+  }
 }
