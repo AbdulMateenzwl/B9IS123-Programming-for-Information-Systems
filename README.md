@@ -11,3 +11,7 @@
 - Commit-3 :
   - [NestJs Documentation (Exception Filters)](https://docs.nestjs.com/exception-filters)
   - [Docker Compose Documentation](https://docs.docker.com/compose/)
+
+- Commit 4:
+  - [JWT Authentication Documentation](https://jwt.io/introduction/)
+  - [NestJS Authentication Documentation](https://docs.nestjs.com/security/authentication)
