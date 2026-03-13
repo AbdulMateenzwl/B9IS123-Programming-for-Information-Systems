@@ -20,3 +20,6 @@
   - [NestJS Authorization Documentation](https://docs.nestjs.com/security/authorization)
   - [Role-Based Access Control (RBAC) Concepts](https://en.wikipedia.org/wiki/Role-based_access_control)
   - Github Copilot Chat - help with implementing role-based access control in NestJS
+
+- Commit 6:
+  - [NestJS Documentation (Controllers & Providers)](https://docs.nestjs.com/controllers)

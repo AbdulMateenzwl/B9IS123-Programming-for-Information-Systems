@@ -1,0 +1,37 @@
+info:
+  name: Create User (Admin only)
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/users"
+  body:
+    type: json
+    data: |-
+      {
+        "firstName": "Jessica",
+        "lastName": "Turner",
+        "email": "jessica.turner@deloitteedge.co.uk",
+        "password": "Password123!",
+        "jobTitle": "Senior Auditor",
+        "role": "employee",
+        "departmentId": "{{departmentId}}"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.body && res.body._id) {
+          bru.setEnvVar("userId", res.body._id);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
