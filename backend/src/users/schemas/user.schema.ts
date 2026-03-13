@@ -1,7 +1,7 @@
 // src/users/schemas/user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-// import { Department } from '../../departments/schemas/department.schema';
+import { Department } from '../../departments/schemas/department.schema';
 
 export type UserDocument = User & Document;
 
@@ -35,6 +35,13 @@ export class User {
     default: UserRole.EMPLOYEE,
   })
   role: UserRole;
+
+  @Prop({
+    type: Types.ObjectId,
+    ref: 'Department',
+    required: true,
+  })
+  departmentId: Types.ObjectId;
 
   @Prop({ default: true })
   isActive: boolean;
