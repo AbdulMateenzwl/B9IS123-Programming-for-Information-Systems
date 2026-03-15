@@ -13,4 +13,9 @@ export class DepartmentsController {
   findAll() {
     return this.departmentsService.findAll();
   }
+
+  @Get(':id')
+  findById(@Param('id') id: string) {
+    return this.departmentsService.findById(id);
+  }
 }
