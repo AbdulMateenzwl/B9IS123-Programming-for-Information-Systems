@@ -1,5 +1,9 @@
 // src/budgets/budgets.service.ts
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Budget, BudgetDocument } from './schemas/budget.schema';
@@ -20,5 +24,27 @@ export class BudgetsService {
       .populate('departmentId', 'departmentName location')
       .sort({ fiscalYear: -1 })
       .lean();
+  }
+
+  async create(dto: {
+    departmentId: string;
+    fiscalYear: number;
+    totalBudget: number;
+  }) {
+    if (dto.totalBudget <= 0) {
+      throw new UnprocessableEntityException(
+        'BR02: Total budget must be greater than 0.',
+      );
+    }
+    const existing = await this.budgetModel.findOne({
+      departmentId: dto.departmentId,
+      fiscalYear: dto.fiscalYear,
+    });
+    if (existing)
+      throw new ConflictException(
+        'Budget for this department and year already exists.',
+      );
+
+    return this.budgetModel.create(dto);
   }
 }

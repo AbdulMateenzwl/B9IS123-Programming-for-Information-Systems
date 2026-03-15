@@ -1,5 +1,5 @@
 // src/budgets/budgets.controller.ts
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { BudgetsService } from './budgets.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -21,5 +21,18 @@ export class BudgetsController {
       fiscalYear: fiscalYear ? parseInt(fiscalYear) : undefined,
       departmentId: departmentId || undefined,
     });
+  }
+
+  @Post()
+  @Roles(UserRole.ADMIN)
+  create(
+    @Body()
+    dto: {
+      departmentId: string;
+      fiscalYear: number;
+      totalBudget: number;
+    },
+  ) {
+    return this.budgetsService.create(dto);
   }
 }

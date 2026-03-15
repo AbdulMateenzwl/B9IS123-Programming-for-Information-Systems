@@ -1,0 +1,33 @@
+info:
+  name: Create Budget (Admin only)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/budgets"
+  body:
+    type: json
+    data: |-
+      {
+        "departmentId": "{{departmentId}}",
+        "fiscalYear": 2026,
+        "totalBudget": 75000
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.body && res.body._id) {
+          bru.setEnvVar("budgetId", res.body._id);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
