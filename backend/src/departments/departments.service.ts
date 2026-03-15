@@ -22,4 +22,8 @@ export class DepartmentsService {
   constructor(
     @InjectModel(Department.name) private deptModel: Model<DepartmentDocument>,
   ) {}
+
+  async findAll() {
+    return this.deptModel.find({ isActive: true }).lean();
+  }
 }

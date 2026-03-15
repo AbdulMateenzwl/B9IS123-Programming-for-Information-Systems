@@ -1,5 +1,5 @@
 // src/departments/departments.controller.ts
-import { Controller, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { DepartmentsService } from './departments.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -8,4 +8,9 @@ import { RolesGuard } from '../common/guards/roles.guard';
 @UseGuards(JwtAuthGuard, RolesGuard)
 export class DepartmentsController {
   constructor(private readonly departmentsService: DepartmentsService) {}
+
+  @Get()
+  findAll() {
+    return this.departmentsService.findAll();
+  }
 }
