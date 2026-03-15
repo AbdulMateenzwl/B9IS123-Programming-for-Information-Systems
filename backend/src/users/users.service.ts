@@ -14,6 +14,13 @@ import { CreateUserDto, UpdateUserDto } from './dto/create-user.dto';
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
+  // Populate departmentId so callers get full dept object
+  private get populatedQuery() {
+    return this.userModel
+      .find()
+      .populate('departmentId', 'departmentName location');
+  }
+
   async findAll(filters: {
     departmentId?: string;
     role?: string;
@@ -69,5 +76,15 @@ export class UsersService {
 
     if (!user) throw new NotFoundException('User not found.');
     return user;
+  }
+
+  async deactivate(id: string) {
+    const user = await this.userModel
+      .findByIdAndUpdate(id, { isActive: false }, { new: true })
+      .select('-passwordHash')
+      .lean();
+
+    if (!user) throw new NotFoundException('User not found.');
+    return { message: 'User deactivated.', user };
   }
 }

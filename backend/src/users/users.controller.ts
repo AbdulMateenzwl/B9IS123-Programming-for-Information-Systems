@@ -22,13 +22,6 @@ import { UserRole } from './schemas/user.schema';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  // POST /api/users
-  @Post()
-  @Roles(UserRole.ADMIN)
-  create(@Body() dto: CreateUserDto) {
-    return this.usersService.create(dto);
-  }
-
   // GET /api/users
   @Get()
   @Roles(UserRole.ADMIN, UserRole.MANAGER, UserRole.FINANCE_OFFICER)
@@ -51,10 +44,24 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
+  // POST /api/users
+  @Post()
+  @Roles(UserRole.ADMIN)
+  create(@Body() dto: CreateUserDto) {
+    return this.usersService.create(dto);
+  }
+
   // PATCH /api/users/:id
   @Patch(':id')
   @Roles(UserRole.ADMIN)
   update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
     return this.usersService.update(id, dto);
+  }
+
+  // DELETE /api/users/:id  (soft delete — deactivates)
+  @Delete(':id')
+  @Roles(UserRole.ADMIN)
+  deactivate(@Param('id') id: string) {
+    return this.usersService.deactivate(id);
   }
 }
