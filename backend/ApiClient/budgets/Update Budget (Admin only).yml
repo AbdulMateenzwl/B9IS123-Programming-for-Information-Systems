@@ -1,0 +1,23 @@
+info:
+  name: Update Budget (Admin only)
+  type: http
+  seq: 3
+
+http:
+  method: PATCH
+  url: "{{baseUrl}}/budgets/{{budgetId}}"
+  body:
+    type: json
+    data: |-
+      {
+        "totalBudget": 90000
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

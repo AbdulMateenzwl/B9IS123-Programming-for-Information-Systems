@@ -1,5 +1,14 @@
 // src/budgets/budgets.controller.ts
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { BudgetsService } from './budgets.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -34,5 +43,11 @@ export class BudgetsController {
     },
   ) {
     return this.budgetsService.create(dto);
+  }
+
+  @Patch(':id')
+  @Roles(UserRole.ADMIN)
+  update(@Param('id') id: string, @Body() dto: { totalBudget?: number }) {
+    return this.budgetsService.update(id, dto);
   }
 }

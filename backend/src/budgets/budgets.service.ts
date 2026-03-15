@@ -2,6 +2,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -46,5 +47,17 @@ export class BudgetsService {
       );
 
     return this.budgetModel.create(dto);
+  }
+
+  async update(id: string, dto: { totalBudget?: number }) {
+    if (dto.totalBudget !== undefined && dto.totalBudget <= 0) {
+      throw new UnprocessableEntityException('Budget must be greater than 0.');
+    }
+    const budget = await this.budgetModel
+      .findByIdAndUpdate(id, dto, { new: true })
+      .populate('departmentId', 'departmentName')
+      .lean();
+    if (!budget) throw new NotFoundException('Budget not found.');
+    return budget;
   }
 }
