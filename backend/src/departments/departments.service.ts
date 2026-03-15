@@ -1,12 +1,22 @@
 // src/departments/departments.service.ts
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Department, DepartmentDocument } from './schemas/department.schema';
+import { IsString } from 'class-validator';
 
 export class CreateDepartmentDto {
+  @IsString()
   departmentName: string;
+
+  @IsString()
   location: string;
+
+  @IsString()
   managerName: string;
 }
 
@@ -31,5 +41,13 @@ export class DepartmentsService {
     const dept = await this.deptModel.findById(id).lean();
     if (!dept) throw new NotFoundException('Department not found.');
     return dept;
+  }
+
+  async create(dto: CreateDepartmentDto) {
+    const exists = await this.deptModel.findOne({
+      departmentName: dto.departmentName,
+    });
+    if (exists) throw new ConflictException('Department name already exists.');
+    return this.deptModel.create(dto);
   }
 }

@@ -1,0 +1,25 @@
+info:
+  name: Create Department (Admin only)
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}/departments"
+  body:
+    type: json
+    data: |-
+      {
+        "departmentName": "Legal & Compliance",
+        "location": "London",
+        "managerName": "Victoria Cross"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
