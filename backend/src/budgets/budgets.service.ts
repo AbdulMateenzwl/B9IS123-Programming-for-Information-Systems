@@ -9,4 +9,16 @@ export class BudgetsService {
   constructor(
     @InjectModel(Budget.name) private budgetModel: Model<BudgetDocument>,
   ) {}
+
+  async findAll(filters: { fiscalYear?: number; departmentId?: string }) {
+    const query: any = {};
+    if (filters.fiscalYear) query.fiscalYear = filters.fiscalYear;
+    if (filters.departmentId) query.departmentId = filters.departmentId;
+
+    return this.budgetModel
+      .find(query)
+      .populate('departmentId', 'departmentName location')
+      .sort({ fiscalYear: -1 })
+      .lean();
+  }
 }
