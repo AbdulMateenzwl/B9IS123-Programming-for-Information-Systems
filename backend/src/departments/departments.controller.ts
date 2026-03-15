@@ -1,6 +1,18 @@
 // src/departments/departments.controller.ts
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { CreateDepartmentDto, DepartmentsService } from './departments.service';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  CreateDepartmentDto,
+  DepartmentsService,
+  UpdateDepartmentDto,
+} from './departments.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
@@ -25,5 +37,11 @@ export class DepartmentsController {
   @Roles(UserRole.ADMIN)
   create(@Body() dto: CreateDepartmentDto) {
     return this.departmentsService.create(dto);
+  }
+
+  @Patch(':id')
+  @Roles(UserRole.ADMIN)
+  update(@Param('id') id: string, @Body() dto: UpdateDepartmentDto) {
+    return this.departmentsService.update(id, dto);
   }
 }

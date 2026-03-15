@@ -50,4 +50,12 @@ export class DepartmentsService {
     if (exists) throw new ConflictException('Department name already exists.');
     return this.deptModel.create(dto);
   }
+
+  async update(id: string, dto: UpdateDepartmentDto) {
+    const dept = await this.deptModel
+      .findByIdAndUpdate(id, dto, { new: true })
+      .lean();
+    if (!dept) throw new NotFoundException('Department not found.');
+    return dept;
+  }
 }
