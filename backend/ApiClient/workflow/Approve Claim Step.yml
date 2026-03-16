@@ -1,0 +1,30 @@
+info:
+  name: Approve Claim Step
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseUrl}}/workflow/{{claimId}}/decide"
+  body:
+    type: json
+    data: |-
+      {
+        "decision": "Approved",
+        "comments": "Expenses look reasonable and within policy."
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  ## Approve
+  - Must be logged in as the approver assigned to the current pending step
+  - Steps are sequential — step 1 must be approved before step 2 (BR10)
+  - Final approval triggers the budget check (BR12)

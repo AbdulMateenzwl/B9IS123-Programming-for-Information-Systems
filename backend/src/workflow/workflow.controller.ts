@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { SetupWorkflowDto, WorkflowService } from './workflow.service';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { WorkflowService, SetupWorkflowDto, DecisionDto } from './workflow.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -27,5 +27,16 @@ export class WorkflowController {
     @CurrentUser() user: any,
   ) {
     return this.workflowService.setup(claimId, dto, user);
+  }
+
+  // POST /api/workflow/:claimId/decide
+  @Post(':claimId/decide')
+  @Roles(UserRole.MANAGER, UserRole.FINANCE_OFFICER, UserRole.ADMIN)
+  decide(
+    @Param('claimId') claimId: string,
+    @Body() dto: DecisionDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.workflowService.decide(claimId, dto, user);
   }
 }

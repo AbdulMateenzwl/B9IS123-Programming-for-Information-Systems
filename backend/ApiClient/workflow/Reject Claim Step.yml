@@ -1,0 +1,29 @@
+info:
+  name: Reject Claim Step
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/workflow/{{claimId}}/decide"
+  body:
+    type: json
+    data: |-
+      {
+        "decision": "Rejected",
+        "comments": "Entertainment expenses require Director pre-approval. Please resubmit with authorisation."
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  ## Reject
+  - Rejecting halts the entire workflow immediately (BR11)
+  - Claim status is set to Rejected
