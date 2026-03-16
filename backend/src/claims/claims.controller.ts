@@ -1,8 +1,5 @@
 // src/claims/claims.controller.ts
-import {
-  Controller, Get, 
-  Query, UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ClaimsService } from './claims.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
@@ -16,10 +13,19 @@ export class ClaimsController {
   @Get()
   findAll(
     @CurrentUser() user: any,
-    @Query('status')       status?: string,
-    @Query('employeeId')   employeeId?: string,
+    @Query('status') status?: string,
+    @Query('employeeId') employeeId?: string,
     @Query('departmentId') departmentId?: string,
   ): Promise<any[]> {
-    return this.claimsService.findAll(user, { status, employeeId, departmentId });
+    return this.claimsService.findAll(user, {
+      status,
+      employeeId,
+      departmentId,
+    });
+  }
+
+  @Get(':id')
+  findById(@Param('id') id: string, @CurrentUser() user: any): Promise<any> {
+    return this.claimsService.findById(id, user);
   }
 }

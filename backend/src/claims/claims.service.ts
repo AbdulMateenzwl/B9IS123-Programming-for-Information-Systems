@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Claim, ClaimDocument } from './schemas/claim.schema';
@@ -58,5 +62,39 @@ export class ClaimsService {
     );
 
     return enriched;
+  }
+
+  async findById(id: string, currentUser: any): Promise<any> {
+    const claim = await this.claimModel
+      .findById(id)
+      .populate({
+        path: 'employeeId',
+        select: 'firstName lastName email jobTitle role departmentId',
+        populate: { path: 'departmentId', select: 'departmentName location' },
+      })
+      .lean();
+
+    if (!claim) throw new NotFoundException('Claim not found.');
+
+    const employeeId =
+      (claim.employeeId as any)._id?.toString() || claim.employeeId.toString();
+    if (
+      currentUser.role === UserRole.EMPLOYEE &&
+      employeeId !== currentUser._id.toString()
+    ) {
+      throw new ForbiddenException('Access denied.');
+    }
+
+    const [items, workflow, attachments] = await Promise.all([
+      this.itemModel.find({ claimId: id }).lean(),
+      this.workflowModel
+        .find({ claimId: id })
+        .populate('approverId', 'firstName lastName email role')
+        .sort({ stepNumber: 1 })
+        .lean(),
+      this.attachmentModel.find({ claimId: id }).lean(),
+    ]);
+
+    return { claim, items, workflow, attachments };
   }
 }
