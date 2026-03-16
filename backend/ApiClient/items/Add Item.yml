@@ -1,0 +1,35 @@
+info:
+  name: Add Item
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/claims/{{claimId}}/items"
+  body:
+    type: json
+    data: |-
+      {
+        "category": "Travel",
+        "amount": 145.00,
+        "expenseDate": "2025-03-10",
+        "itemDescription": "Train London to Leeds return",
+        "receiptRequired": true
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.body && res.body._id) {
+          bru.setEnvVar("itemId", res.body._id);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
