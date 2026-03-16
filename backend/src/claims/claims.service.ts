@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Claim, ClaimDocument } from './schemas/claim.schema';
+import { Claim, ClaimDocument, ClaimStatus } from './schemas/claim.schema';
 import { Item, ItemDocument } from '../items/schemas/item.schema';
 import {
   Workflow,
@@ -16,6 +16,7 @@ import {
   AttachmentDocument,
 } from '../attachments/schemas/attachment.schema';
 import { UserRole } from '../users/schemas/user.schema';
+import { CreateClaimDto } from './dto/create-claim.dto';
 
 @Injectable()
 export class ClaimsService {
@@ -96,5 +97,20 @@ export class ClaimsService {
     ]);
 
     return { claim, items, workflow, attachments };
+  }
+
+  async create(dto: CreateClaimDto, currentUser: any): Promise<any> {
+    const claim = await this.claimModel.create({
+      employeeId: currentUser._id,
+      description: dto.description,
+      currency: dto.currency || 'GBP',
+      status: ClaimStatus.DRAFT,
+      totalAmount: 0,
+    });
+
+    return claim.populate({
+      path: 'employeeId',
+      select: 'firstName lastName email jobTitle',
+    });
   }
 }

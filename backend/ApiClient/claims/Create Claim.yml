@@ -1,0 +1,32 @@
+info:
+  name: Create Claim
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/claims"
+  body:
+    type: json
+    data: |-
+      {
+        "description": "Client site visit - Leeds office",
+        "currency": "GBP"
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.body && res.body._id) {
+          bru.setEnvVar("claimId", res.body._id);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
