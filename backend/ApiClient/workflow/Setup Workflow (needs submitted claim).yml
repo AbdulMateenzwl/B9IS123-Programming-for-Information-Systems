@@ -1,0 +1,42 @@
+info:
+  name: Setup Workflow (needs submitted claim)
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/workflow/{{claimId}}/setup"
+  body:
+    type: json
+    data: |-
+      {
+        "steps": [
+          {
+            "approverId": "69b097f1c5ce91a423fa1c07",
+            "stepNumber": 1
+          },
+          {
+            "approverId": "69b097f1c5ce91a423fa1c0a",
+            "stepNumber": 2
+          }
+        ]
+      }
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+
+docs: |-
+  ## Setup Workflow
+  - Claim must be in Submitted status
+  - Minimum 2 steps required (BR09)
+  - Approvers must be manager, finance_officer, or admin (BR03)
+  - Cannot approve own claim (BR08)
+  - Steps must be numbered sequentially from 1 (BR10)
+
+  Run "Get All Users" first and copy the _id values for your approvers.

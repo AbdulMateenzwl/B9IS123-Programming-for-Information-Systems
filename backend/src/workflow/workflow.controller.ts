@@ -1,5 +1,5 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { WorkflowService } from './workflow.service';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { SetupWorkflowDto, WorkflowService } from './workflow.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -16,5 +16,16 @@ export class WorkflowController {
   @Roles(UserRole.MANAGER, UserRole.FINANCE_OFFICER, UserRole.ADMIN)
   getPending(@CurrentUser() user: any) {
     return this.workflowService.getPendingForApprover(user);
+  }
+
+  // POST /api/workflow/:claimId/setup
+  @Post(':claimId/setup')
+  @Roles(UserRole.MANAGER, UserRole.FINANCE_OFFICER, UserRole.ADMIN)
+  setup(
+    @Param('claimId') claimId: string,
+    @Body() dto: SetupWorkflowDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.workflowService.setup(claimId, dto, user);
   }
 }
