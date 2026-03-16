@@ -1,10 +1,19 @@
 // src/claims/claims.controller.ts
-import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ClaimsService } from './claims.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
-import { CreateClaimDto } from './dto/create-claim.dto';
+import { CreateClaimDto, UpdateClaimDto } from './dto/create-claim.dto';
 
 @Controller('claims')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -33,5 +42,14 @@ export class ClaimsController {
   @Post()
   create(@Body() dto: CreateClaimDto, @CurrentUser() user: any): Promise<any> {
     return this.claimsService.create(dto, user);
+  }
+
+  @Patch(':id')
+  update(
+    @Param('id') id: string,
+    @Body() dto: UpdateClaimDto,
+    @CurrentUser() user: any,
+  ): Promise<any> {
+    return this.claimsService.update(id, dto, user);
   }
 }

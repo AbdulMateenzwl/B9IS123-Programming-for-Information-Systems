@@ -2,6 +2,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -16,7 +17,7 @@ import {
   AttachmentDocument,
 } from '../attachments/schemas/attachment.schema';
 import { UserRole } from '../users/schemas/user.schema';
-import { CreateClaimDto } from './dto/create-claim.dto';
+import { CreateClaimDto, UpdateClaimDto } from './dto/create-claim.dto';
 
 @Injectable()
 export class ClaimsService {
@@ -112,5 +113,35 @@ export class ClaimsService {
       path: 'employeeId',
       select: 'firstName lastName email jobTitle',
     });
+  }
+
+  async update(
+    id: string,
+    dto: UpdateClaimDto,
+    currentUser: any,
+  ): Promise<any> {
+    const claim = await this.claimModel.findById(id);
+    if (!claim) throw new NotFoundException('Claim not found.');
+
+    this.assertOwner(claim, currentUser);
+    this.assertDraft(claim);
+
+    Object.assign(claim, dto);
+    await claim.save();
+    return claim;
+  }
+
+  private assertOwner(claim: ClaimDocument, currentUser: any): void {
+    const isOwner = claim.employeeId.toString() === currentUser._id.toString();
+    const isAdmin = currentUser.role === UserRole.ADMIN;
+    if (!isOwner && !isAdmin) throw new ForbiddenException('Access denied.');
+  }
+
+  private assertDraft(claim: ClaimDocument): void {
+    if (claim.status !== ClaimStatus.DRAFT) {
+      throw new UnprocessableEntityException(
+        'Only Draft claims can be modified.',
+      );
+    }
   }
 }
