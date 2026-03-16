@@ -52,4 +52,9 @@ export class ClaimsController {
   ): Promise<any> {
     return this.claimsService.update(id, dto, user);
   }
+
+  @Post(':id/submit')
+  submit(@Param('id') id: string, @CurrentUser() user: any): Promise<any> {
+    return this.claimsService.submit(id, user);
+  }
 }

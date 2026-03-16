@@ -1,0 +1,17 @@
+info:
+  name: Submit Claim
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{baseUrl}}/claims/{{claimId}}/submit"
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

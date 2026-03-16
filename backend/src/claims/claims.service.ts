@@ -144,4 +144,25 @@ export class ClaimsService {
       );
     }
   }
+
+  async submit(id: string, currentUser: any): Promise<any> {
+    const claim = await this.claimModel.findById(id);
+    if (!claim) throw new NotFoundException('Claim not found.');
+
+    this.assertOwner(claim, currentUser);
+    this.assertDraft(claim);
+
+    const itemCount = await this.itemModel.countDocuments({ claimId: id });
+    if (itemCount === 0) {
+      throw new UnprocessableEntityException(
+        'BR04: A claim must have at least one expense item before submission.',
+      );
+    }
+
+    claim.status = ClaimStatus.SUBMITTED;
+    claim.submissionDate = new Date();
+    await claim.save();
+
+    return { message: 'Claim submitted successfully.', claim };
+  }
 }
