@@ -1,11 +1,10 @@
-// src/workflow/schemas/workflow.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 export type WorkflowDocument = Workflow & Document;
 
 export enum WorkflowDecision {
-  PENDING = 'Pending',
+  PENDING  = 'Pending',
   APPROVED = 'Approved',
   REJECTED = 'Rejected',
 }
