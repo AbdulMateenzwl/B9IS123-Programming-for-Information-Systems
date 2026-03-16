@@ -1,32 +1,25 @@
 import {
-  ForbiddenException,
   Injectable,
   NotFoundException,
+  ForbiddenException,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Claim, ClaimDocument, ClaimStatus } from './schemas/claim.schema';
 import { Item, ItemDocument } from '../items/schemas/item.schema';
-import {
-  Workflow,
-  WorkflowDocument,
-} from '../workflow/schemas/workflow.schema';
-import {
-  Attachment,
-  AttachmentDocument,
-} from '../attachments/schemas/attachment.schema';
-import { UserRole } from '../users/schemas/user.schema';
+import { Workflow, WorkflowDocument } from '../workflow/schemas/workflow.schema';
+import { Attachment, AttachmentDocument } from '../attachments/schemas/attachment.schema';
 import { CreateClaimDto, UpdateClaimDto } from './dto/create-claim.dto';
+import { UserRole } from '../users/schemas/user.schema';
 
 @Injectable()
 export class ClaimsService {
   constructor(
-    @InjectModel(Claim.name) private claimModel: Model<ClaimDocument>,
-    @InjectModel(Item.name) private itemModel: Model<ItemDocument>,
-    @InjectModel(Workflow.name) private workflowModel: Model<WorkflowDocument>,
-    @InjectModel(Attachment.name)
-    private attachmentModel: Model<AttachmentDocument>,
+    @InjectModel(Claim.name)      private claimModel: Model<ClaimDocument>,
+    @InjectModel(Item.name)       private itemModel: Model<ItemDocument>,
+    @InjectModel(Workflow.name)   private workflowModel: Model<WorkflowDocument>,
+    @InjectModel(Attachment.name) private attachmentModel: Model<AttachmentDocument>,
   ) {}
 
   async findAll(
@@ -78,8 +71,7 @@ export class ClaimsService {
 
     if (!claim) throw new NotFoundException('Claim not found.');
 
-    const employeeId =
-      (claim.employeeId as any)._id?.toString() || claim.employeeId.toString();
+    const employeeId = (claim.employeeId as any)._id?.toString() || claim.employeeId.toString();
     if (
       currentUser.role === UserRole.EMPLOYEE &&
       employeeId !== currentUser._id.toString()
@@ -102,10 +94,10 @@ export class ClaimsService {
 
   async create(dto: CreateClaimDto, currentUser: any): Promise<any> {
     const claim = await this.claimModel.create({
-      employeeId: currentUser._id,
+      employeeId:  currentUser._id,
       description: dto.description,
-      currency: dto.currency || 'GBP',
-      status: ClaimStatus.DRAFT,
+      currency:    dto.currency || 'GBP',
+      status:      ClaimStatus.DRAFT,
       totalAmount: 0,
     });
 
@@ -115,11 +107,7 @@ export class ClaimsService {
     });
   }
 
-  async update(
-    id: string,
-    dto: UpdateClaimDto,
-    currentUser: any,
-  ): Promise<any> {
+  async update(id: string, dto: UpdateClaimDto, currentUser: any): Promise<any> {
     const claim = await this.claimModel.findById(id);
     if (!claim) throw new NotFoundException('Claim not found.');
 
@@ -129,20 +117,6 @@ export class ClaimsService {
     Object.assign(claim, dto);
     await claim.save();
     return claim;
-  }
-
-  private assertOwner(claim: ClaimDocument, currentUser: any): void {
-    const isOwner = claim.employeeId.toString() === currentUser._id.toString();
-    const isAdmin = currentUser.role === UserRole.ADMIN;
-    if (!isOwner && !isAdmin) throw new ForbiddenException('Access denied.');
-  }
-
-  private assertDraft(claim: ClaimDocument): void {
-    if (claim.status !== ClaimStatus.DRAFT) {
-      throw new UnprocessableEntityException(
-        'Only Draft claims can be modified.',
-      );
-    }
   }
 
   async submit(id: string, currentUser: any): Promise<any> {
@@ -159,10 +133,52 @@ export class ClaimsService {
       );
     }
 
-    claim.status = ClaimStatus.SUBMITTED;
+    claim.status         = ClaimStatus.SUBMITTED;
     claim.submissionDate = new Date();
     await claim.save();
 
     return { message: 'Claim submitted successfully.', claim };
+  }
+
+  async delete(id: string, currentUser: any): Promise<any> {
+    const claim = await this.claimModel.findById(id);
+    if (!claim) throw new NotFoundException('Claim not found.');
+
+    const isOwner = claim.employeeId.toString() === currentUser._id.toString();
+    if (!isOwner && currentUser.role !== UserRole.ADMIN) {
+      throw new ForbiddenException('Access denied.');
+    }
+
+    if (claim.status !== ClaimStatus.DRAFT && currentUser.role !== UserRole.ADMIN) {
+      throw new UnprocessableEntityException('Only Admin can delete non-Draft claims.');
+    }
+
+    await Promise.all([
+      this.claimModel.findByIdAndDelete(id),
+      this.itemModel.deleteMany({ claimId: id }),
+      this.workflowModel.deleteMany({ claimId: id }),
+      this.attachmentModel.deleteMany({ claimId: id }),
+    ]);
+
+    return { message: 'Claim deleted.' };
+  }
+
+  private assertOwner(claim: ClaimDocument, currentUser: any): void {
+    const isOwner = claim.employeeId.toString() === currentUser._id.toString();
+    const isAdmin = currentUser.role === UserRole.ADMIN;
+    if (!isOwner && !isAdmin) throw new ForbiddenException('Access denied.');
+  }
+
+  private assertDraft(claim: ClaimDocument): void {
+    if (claim.status !== ClaimStatus.DRAFT) {
+      throw new UnprocessableEntityException('Only Draft claims can be modified.');
+    }
+  }
+
+  async syncTotalAmount(claimId: string): Promise<number> {
+    const items = await this.itemModel.find({ claimId });
+    const total = items.reduce((sum, item) => sum + item.amount, 0);
+    await this.claimModel.findByIdAndUpdate(claimId, { totalAmount: total });
+    return total;
   }
 }
