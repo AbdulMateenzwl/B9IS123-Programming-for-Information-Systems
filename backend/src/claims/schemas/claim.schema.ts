@@ -1,4 +1,3 @@
-// src/claims/schemas/claim.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
@@ -40,7 +39,7 @@ export class Claim {
   @Prop({
     type: String,
     enum: ['GBP', 'USD', 'EUR'],
-    default: 'EUR',
+    default: 'GBP',
   })
   currency: string;
 }
