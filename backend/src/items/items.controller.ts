@@ -1,12 +1,6 @@
 import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Body,
-  Param,
-  UseGuards,
+  Controller, Get, Post, Patch, Delete,
+  Body, Param, UseGuards,
 } from '@nestjs/common';
 import { ItemsService, CreateItemDto, UpdateItemDto } from './items.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -38,10 +32,20 @@ export class ItemsController {
   @Patch(':itemId')
   update(
     @Param('claimId') claimId: string,
-    @Param('itemId') itemId: string,
+    @Param('itemId')  itemId: string,
     @Body() dto: UpdateItemDto,
     @CurrentUser() user: any,
   ) {
     return this.itemsService.update(claimId, itemId, dto, user);
+  }
+
+  // DELETE /api/claims/:claimId/items/:itemId
+  @Delete(':itemId')
+  delete(
+    @Param('claimId') claimId: string,
+    @Param('itemId')  itemId: string,
+    @CurrentUser() user: any,
+  ) {
+    return this.itemsService.delete(claimId, itemId, user);
   }
 }
