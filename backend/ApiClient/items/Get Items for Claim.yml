@@ -1,0 +1,25 @@
+info:
+  name: Get Items for Claim
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{baseUrl}}/claims/{{claimId}}/items"
+  auth:
+    type: bearer
+    token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.body && res.body.length > 0) {
+          bru.setEnvVar("itemId", res.body[0]._id);
+        }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

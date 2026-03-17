@@ -58,6 +58,10 @@ export class ItemsService {
     @InjectModel(Claim.name) private claimModel: Model<ClaimDocument>,
   ) {}
 
+  async findByClaim(claimId: string) {
+    return this.itemModel.find({ claimId }).lean();
+  }
+
   async create(claimId: string, dto: CreateItemDto, currentUser: any) {
     const claim = await this.claimModel.findById(claimId);
     if (!claim) throw new NotFoundException('Claim not found.');

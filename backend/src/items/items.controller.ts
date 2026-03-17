@@ -18,6 +18,12 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
+  // GET /api/claims/:claimId/items
+  @Get()
+  findAll(@Param('claimId') claimId: string) {
+    return this.itemsService.findByClaim(claimId);
+  }
+
   // POST /api/claims/:claimId/items
   @Post()
   create(
