@@ -1,11 +1,6 @@
 import {
-  Controller,
-  Post,
-  Delete,
-  Param,
-  UseGuards,
-  UseInterceptors,
-  UploadedFile,
+  Controller, Post, Delete, Param,
+  UseGuards, UseInterceptors, UploadedFile,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -40,13 +35,11 @@ export class AttachmentsController {
 
   // POST /api/attachments/:claimId
   @Post(':claimId')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: multerStorage,
-      fileFilter: multerFilter,
-      limits: { fileSize: 10 * 1024 * 1024 },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file', {
+    storage: multerStorage,
+    fileFilter: multerFilter,
+    limits: { fileSize: 10 * 1024 * 1024 },
+  }))
   upload(
     @Param('claimId') claimId: string,
     @UploadedFile() file: Express.Multer.File,
@@ -55,4 +48,9 @@ export class AttachmentsController {
     return this.attachmentsService.upload(claimId, file, user);
   }
 
+  // DELETE /api/attachments/:attachmentId
+  @Delete(':attachmentId')
+  delete(@Param('attachmentId') id: string, @CurrentUser() user: any) {
+    return this.attachmentsService.delete(id, user);
+  }
 }

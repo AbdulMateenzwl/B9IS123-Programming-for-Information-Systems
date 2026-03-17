@@ -6,9 +6,24 @@ info:
 http:
   method: POST
   url: "{{baseUrl}}/attachments/{{claimId}}"
+  body:
+    type: multipart-form
+    data:
+      - name: file
+        type: file
+        value:
+          - /home/mateen/Downloads/Abdul.Mateen.Receptionist.pdf
   auth:
     type: bearer
     token: "{{token}}"
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        if (res.body && res.body._id) {
+          bru.setEnvVar("attachmentId", res.body._id);
+        }
 
 settings:
   encodeUrl: true
