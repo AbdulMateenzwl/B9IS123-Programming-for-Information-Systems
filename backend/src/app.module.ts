@@ -10,6 +10,7 @@ import { WorkflowModule } from './workflow/workflow.module';
 import { ClaimsModule } from './claims/claims.module';
 import { ItemsModule } from './items/items.module';
 import { AttachmentsModule } from './attachments/attachments.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { AttachmentsModule } from './attachments/attachments.module';
     WorkflowModule,
     ClaimsModule,
     ItemsModule,
-    AttachmentsModule
+    AttachmentsModule,
+    DashboardModule,
   ],
 })
 export class AppModule {}
