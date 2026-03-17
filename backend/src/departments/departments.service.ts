@@ -1,4 +1,3 @@
-// src/departments/departments.service.ts
 import {
   ConflictException,
   Injectable,
@@ -10,13 +9,8 @@ import { Department, DepartmentDocument } from './schemas/department.schema';
 import { IsString } from 'class-validator';
 
 export class CreateDepartmentDto {
-  @IsString()
   departmentName: string;
-
-  @IsString()
   location: string;
-
-  @IsString()
   managerName: string;
 }
 

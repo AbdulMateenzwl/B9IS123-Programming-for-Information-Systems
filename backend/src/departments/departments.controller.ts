@@ -1,4 +1,3 @@
-// src/departments/departments.controller.ts
 import {
   Body,
   Controller,

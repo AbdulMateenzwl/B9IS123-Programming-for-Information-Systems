@@ -14,9 +14,9 @@ async function bootstrap() {
   // Global validation pipe
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,
+      whitelist: true, // Strip unknown properties
       forbidNonWhitelisted: true,
-      transform: true,
+      transform: true, // Auto-transform types
       transformOptions: { enableImplicitConversion: true },
     }),
   );
@@ -26,7 +26,10 @@ async function bootstrap() {
 
   // CORS
   app.enableCors({
-    origin: ['http://localhost:4200'],
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? ['https://expenses.deloitteedge.co.uk']
+        : ['http://localhost:4200', 'http://localhost:3001'],
     credentials: true,
   });
 

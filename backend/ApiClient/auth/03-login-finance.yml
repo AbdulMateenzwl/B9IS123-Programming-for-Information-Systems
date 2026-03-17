@@ -1,7 +1,7 @@
 info:
-  name: Login (Admin)
+  name: Login (Finance Officer)
   type: http
-  seq: 1
+  seq: 3
 
 http:
   method: POST
@@ -10,7 +10,7 @@ http:
     type: json
     data: |-
       {
-        "email": "admin@deloitteedge.co.uk",
+        "email": "michael.hartley@deloitteedge.co.uk",
         "password": "Password123!"
       }
 

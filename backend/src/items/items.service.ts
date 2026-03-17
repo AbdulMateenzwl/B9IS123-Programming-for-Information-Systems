@@ -33,25 +33,10 @@ export class CreateItemDto {
 }
 
 export class UpdateItemDto {
-  @IsOptional()
-  @IsEnum(ExpenseCategory)
   category?: ExpenseCategory;
-
-  @IsOptional()
-  @IsNumber()
-  @Min(0.01)
   amount?: number;
-
-  @IsOptional()
-  @IsDateString()
   expenseDate?: string;
-
-  @IsOptional()
-  @IsString()
   itemDescription?: string;
-
-  @IsOptional()
-  @IsBoolean()
   receiptRequired?: boolean;
 }
 

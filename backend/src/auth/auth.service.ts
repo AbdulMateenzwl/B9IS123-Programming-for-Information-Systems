@@ -1,4 +1,3 @@
-// src/auth/auth.service.ts
 import {
   Injectable,
   UnauthorizedException,
@@ -23,6 +22,7 @@ export class AuthService {
   async login(dto: LoginDto) {
     const user = await this.userModel
       .findOne({ email: dto.email.toLowerCase().trim() })
+      .populate('departmentId', 'departmentName location')
       .lean();
 
     if (!user || !user.isActive) {
