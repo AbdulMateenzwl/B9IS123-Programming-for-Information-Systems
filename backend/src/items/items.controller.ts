@@ -33,4 +33,15 @@ export class ItemsController {
   ) {
     return this.itemsService.create(claimId, dto, user);
   }
+
+  // PATCH /api/claims/:claimId/items/:itemId
+  @Patch(':itemId')
+  update(
+    @Param('claimId') claimId: string,
+    @Param('itemId') itemId: string,
+    @Body() dto: UpdateItemDto,
+    @CurrentUser() user: any,
+  ) {
+    return this.itemsService.update(claimId, itemId, dto, user);
+  }
 }

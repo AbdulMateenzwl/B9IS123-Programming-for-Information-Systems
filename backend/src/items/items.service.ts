@@ -44,10 +44,25 @@ export class CreateItemDto {
 }
 
 export class UpdateItemDto {
+  @IsOptional()
+  @IsEnum(ExpenseCategory)
   category?: ExpenseCategory;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0.01)
   amount?: number;
+
+  @IsOptional()
+  @IsDateString()
   expenseDate?: string;
+
+  @IsOptional()
+  @IsString()
   itemDescription?: string;
+
+  @IsOptional()
+  @IsBoolean()
   receiptRequired?: boolean;
 }
 
@@ -78,6 +93,32 @@ export class ItemsService {
     // Sync total amount on claim
     await this.syncClaimTotal(claimId);
 
+    return item;
+  }
+
+  async update(
+    claimId: string,
+    itemId: string,
+    dto: UpdateItemDto,
+    currentUser: any,
+  ) {
+    const claim = await this.claimModel.findById(claimId);
+    if (!claim) throw new NotFoundException('Claim not found.');
+
+    this.assertOwner(claim, currentUser);
+    this.assertEditable(claim);
+
+    const item = await this.itemModel.findOneAndUpdate(
+      { _id: itemId, claimId },
+      {
+        ...dto,
+        ...(dto.expenseDate && { expenseDate: new Date(dto.expenseDate) }),
+      },
+      { new: true },
+    );
+    if (!item) throw new NotFoundException('Item not found.');
+
+    await this.syncClaimTotal(claimId);
     return item;
   }
 
