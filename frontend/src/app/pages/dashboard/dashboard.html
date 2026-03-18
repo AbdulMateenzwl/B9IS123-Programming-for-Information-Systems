@@ -1,0 +1,274 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Dashboard</h2>
+        <span class="text-muted">Welcome back, {{ auth.currentUser?.firstName }}</span>
+    </div>
+
+    <div *ngIf="loading" class="empty-state">Loading dashboard...</div>
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+    <ng-container *ngIf="!loading && role === 'employee' && employeeData">
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value">{{ employeeData.claimSummary.total }}</div>
+                <div class="stat-label">Total Claims</div>
+            </div>
+            <div class="stat-box blue">
+                <div class="stat-value">{{ employeeData.claimSummary.submitted }}</div>
+                <div class="stat-label">Submitted</div>
+            </div>
+            <div class="stat-box orange">
+                <div class="stat-value">{{ employeeData.claimSummary.underReview }}</div>
+                <div class="stat-label">Under Review</div>
+            </div>
+            <div class="stat-box green">
+                <div class="stat-value">{{ employeeData.claimSummary.approved }}</div>
+                <div class="stat-label">Approved</div>
+            </div>
+            <div class="stat-box red">
+                <div class="stat-value">{{ employeeData.claimSummary.rejected }}</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+            <div class="stat-box purple">
+                <div class="stat-value">
+                    £{{ employeeData.totalApprovedSpendThisYear | number: '1.2-2' }}
+                </div>
+                <div class="stat-label">Approved This Year</div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="card">
+                <div class="card-title">Recent Claims</div>
+                <div *ngIf="employeeData.recentClaims.length === 0" class="empty-state">
+                    No claims yet
+                </div>
+                <table *ngIf="employeeData.recentClaims.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of employeeData.recentClaims">
+                            <td>
+                                <a [routerLink]="['/claims', c._id]">{{ c.description }}</a>
+                            </td>
+                            <td>£{{ c.totalAmount | number: '1.2-2' }}</td>
+                            <td>
+                                <span [class]="getBadge(c.status)">{{ c.status }}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <div class="card-title">Spend by Category</div>
+                <div *ngIf="employeeData.spendByCategory.length === 0" class="empty-state">
+                    No approved spend yet
+                </div>
+                <table *ngIf="employeeData.spendByCategory.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let c of employeeData.spendByCategory">
+                            <td>{{ c.category }}</td>
+                            <td>{{ c.itemCount }}</td>
+                            <td>£{{ c.totalSpend | number: '1.2-2' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && role === 'manager' && managerData">
+        <div class="stats-grid">
+            <div class="stat-box red">
+                <div class="stat-value">{{ managerData.pendingApprovalsCount }}</div>
+                <div class="stat-label">Pending My Approval</div>
+            </div>
+            <div class="stat-box blue">
+                <div class="stat-value">{{ managerData.systemClaimSummary.submitted }}</div>
+                <div class="stat-label">Submitted</div>
+            </div>
+            <div class="stat-box orange">
+                <div class="stat-value">{{ managerData.systemClaimSummary.underReview }}</div>
+                <div class="stat-label">Under Review</div>
+            </div>
+            <div class="stat-box green">
+                <div class="stat-value">{{ managerData.systemClaimSummary.approved }}</div>
+                <div class="stat-label">Approved</div>
+            </div>
+            <div class="stat-box purple">
+                <div class="stat-value">
+                    £{{ managerData.totalApprovedSpendThisYear | number: '1.2-2' }}
+                </div>
+                <div class="stat-label">Total Approved</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">My Pending Approvals</div>
+            <div *ngIf="managerData.pendingApprovals.length === 0" class="empty-state">
+                No pending approvals
+            </div>
+            <table *ngIf="managerData.pendingApprovals.length > 0">
+                <thead>
+                    <tr>
+                        <th>Claim</th>
+                        <th>Employee</th>
+                        <th>Amount</th>
+                        <th>Step</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let w of managerData.pendingApprovals">
+                        <td>{{ getClaim(w)?.description }}</td>
+                        <td>{{ getEmployee(w) }}</td>
+                        <td>£{{ getClaim(w)?.totalAmount | number: '1.2-2' }}</td>
+                        <td>Step {{ w.stepNumber }}</td>
+                        <td><a [routerLink]="['/workflow']" class="btn btn-sm btn-primary">Review</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && role === 'finance_officer' && financeData">
+        <div class="stats-grid">
+            <div class="stat-box blue">
+                <div class="stat-value">£{{ financeData.totalBudgetAllocated | number: '1.2-2' }}</div>
+                <div class="stat-label">Total Budget</div>
+            </div>
+            <div class="stat-box orange">
+                <div class="stat-value">£{{ financeData.totalSpent | number: '1.2-2' }}</div>
+                <div class="stat-label">Total Spent</div>
+            </div>
+            <div class="stat-box green">
+                <div class="stat-value">£{{ financeData.totalRemaining | number: '1.2-2' }}</div>
+                <div class="stat-label">Remaining</div>
+            </div>
+            <div class="stat-box red">
+                <div class="stat-value">{{ financeData.pendingWorkflowSteps }}</div>
+                <div class="stat-label">Pending Steps</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-title">Budget Utilisation by Department</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Budget</th>
+                        <th>Spent</th>
+                        <th>Remaining</th>
+                        <th>Used %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let b of financeData.budgetOverview">
+                        <td>{{ b.department.departmentName }}</td>
+                        <td>£{{ b.totalBudget | number: '1.2-2' }}</td>
+                        <td>£{{ b.spentAmount | number: '1.2-2' }}</td>
+                        <td>£{{ b.remainingBudget | number: '1.2-2' }}</td>
+                        <td>
+                            <div>{{ b.utilisationPct }}%</div>
+                            <div class="progress-bar-wrap">
+                                <div class="progress-bar" [class.warn]="b.utilisationPct > 70"
+                                    [class.danger]="b.utilisationPct > 90" [style.width.%]="b.utilisationPct"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="!loading && role === 'admin' && adminData">
+        <div class="stats-grid">
+            <div class="stat-box blue">
+                <div class="stat-value">{{ adminData.users.total }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">{{ adminData.claims.total }}</div>
+                <div class="stat-label">Total Claims</div>
+            </div>
+            <div class="stat-box orange">
+                <div class="stat-value">{{ adminData.claims.underReview }}</div>
+                <div class="stat-label">Under Review</div>
+            </div>
+            <div class="stat-box green">
+                <div class="stat-value">
+                    £{{ adminData.totalApprovedSpendThisYear | number: '1.2-2' }}
+                </div>
+                <div class="stat-label">Approved This Year</div>
+            </div>
+            <div class="stat-box purple">
+                <div class="stat-value">{{ adminData.budget.utilisationPct }}%</div>
+                <div class="stat-label">Budget Used</div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="card">
+                <div class="card-title">Claims by Status</div>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>Draft</td>
+                            <td>{{ adminData.claims.draft }}</td>
+                        </tr>
+                        <tr>
+                            <td>Submitted</td>
+                            <td>{{ adminData.claims.submitted }}</td>
+                        </tr>
+                        <tr>
+                            <td>Under Review</td>
+                            <td>{{ adminData.claims.underReview }}</td>
+                        </tr>
+                        <tr>
+                            <td>Approved</td>
+                            <td>{{ adminData.claims.approved }}</td>
+                        </tr>
+                        <tr>
+                            <td>Rejected</td>
+                            <td>{{ adminData.claims.rejected }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="card">
+                <div class="card-title">Top Spenders This Year</div>
+                <div *ngIf="adminData.topSpendersThisYear.length === 0" class="empty-state">
+                    No approved spend yet
+                </div>
+                <table *ngIf="adminData.topSpendersThisYear.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Claims</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let s of adminData.topSpendersThisYear">
+                            <td>{{ s.firstName }} {{ s.lastName }}</td>
+                            <td>{{ s.claimCount }}</td>
+                            <td>£{{ s.totalSpend | number: '1.2-2' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+</div>
