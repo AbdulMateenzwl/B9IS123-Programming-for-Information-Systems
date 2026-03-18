@@ -1,1 +1,27 @@
-<h1>Project</h1>
+<ng-container *ngIf="auth.isLoggedIn; else loginOutlet">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="sidebar-logo">Deloitte<span>Edge</span></div>
+            <nav>
+                <a routerLink="/dashboard" routerLinkActive="active">📊 Dashboard</a>
+                <a routerLink="/claims" routerLinkActive="active">📋 My Claims</a>
+                <a routerLink="/workflow" routerLinkActive="active" *ngIf="canApprove">✅ Approvals</a>
+                <a routerLink="/users" routerLinkActive="active" *ngIf="isAdmin">👥 Users</a>
+                <a routerLink="/departments" routerLinkActive="active" *ngIf="isAdmin">🏢 Departments</a>
+                <a routerLink="/budgets" routerLinkActive="active" *ngIf="canViewBudgets">💰 Budgets</a>
+                <a routerLink="/reports" routerLinkActive="active" *ngIf="canApprove">📈 Reports</a>
+            </nav>
+            <div class="sidebar-footer">
+                <strong>{{ auth.currentUser?.firstName }} {{ auth.currentUser?.lastName }}</strong>
+                <span>{{ auth.currentUser?.role | titlecase }}</span>
+                <button (click)="auth.logout()">Sign Out</button>
+            </div>
+        </aside>
+        <div class="main-content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</ng-container>
+<ng-template #loginOutlet>
+    <router-outlet></router-outlet>
+</ng-template>

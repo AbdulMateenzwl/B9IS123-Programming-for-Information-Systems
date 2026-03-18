@@ -23,3 +23,7 @@
 
 - Commit 6:
   - [NestJS Documentation (Controllers & Providers)](https://docs.nestjs.com/controllers)
+
+- Commit 39
+  - [Angular Documentation (Guards & Interceptors)](https://angular.dev/guide/routing/route-guards)
+  - [RxJS Documentation (BehaviorSubject)](https://rxjs.dev/api/index/class/BehaviorSubject)
