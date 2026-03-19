@@ -1,0 +1,90 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Expense Claims</h2>
+        <button class="btn btn-primary" (click)="showForm = !showForm">
+            {{ showForm ? 'Cancel' : '+ New Claim' }}
+        </button>
+    </div>
+
+    <!-- Create form -->
+    <div class="card" *ngIf="showForm">
+        <div class="card-title">Create New Claim</div>
+        <div class="alert alert-error" *ngIf="formError">{{ formError }}</div>
+        <div class="form-group">
+            <label>Description</label>
+            <input type="text" [(ngModel)]="form.description" placeholder="e.g. Client site visit - Birmingham">
+        </div>
+        <div class="form-group">
+            <label>Currency</label>
+            <select [(ngModel)]="form.currency">
+                <option value="GBP">GBP (£)</option>
+                <option value="USD">USD ($)</option>
+                <option value="EUR">EUR (€)</option>
+            </select>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-success" (click)="createClaim()" [disabled]="saving">
+                {{ saving ? 'Creating...' : 'Create Claim' }}
+            </button>
+            <button class="btn btn-secondary" (click)="showForm = false">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="card" style="padding: 12px 20px">
+        <div style="display:flex; gap:12px; align-items:center">
+            <label style="font-size:12px; font-weight:600; color:#555">Filter by Status:</label>
+            <select [(ngModel)]="filterStatus" (change)="loadClaims()"
+                style="padding:5px 8px; border:1px solid #d0d5dd; border-radius:4px; font-size:13px">
+                <option value="">All</option>
+                <option value="Draft">Draft</option>
+                <option value="Submitted">Submitted</option>
+                <option value="Under Review">Under Review</option>
+                <option value="Approved">Approved</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+        </div>
+    </div>
+
+    <div *ngIf="loading" class="empty-state">Loading claims...</div>
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+
+    <div class="card" *ngIf="!loading">
+        <div class="alert alert-success" *ngIf="successMsg">{{ successMsg }}</div>
+        <div class="empty-state" *ngIf="claims.length === 0">No claims found.</div>
+        <div class="table-wrap" *ngIf="claims.length > 0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Employee</th>
+                        <th>Amount</th>
+                        <th>Currency</th>
+                        <th>Status</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let c of claims">
+                        <td><a [routerLink]="['/claims', c._id]">{{ c.description }}</a></td>
+                        <td>{{ getEmployeeName(c) }}</td>
+                        <td>{{ c.totalAmount | number:'1.2-2' }}</td>
+                        <td>{{ c.currency }}</td>
+                        <td><span [class]="getBadge(c.status)">{{ c.status }}</span></td>
+                        <td>{{ c.submissionDate ? (c.submissionDate | date:'dd MMM yyyy') : '—' }}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a [routerLink]="['/claims', c._id]" class="btn btn-sm btn-primary">View</a>
+                                <button class="btn btn-sm btn-success" *ngIf="c.status === 'Draft'"
+                                    (click)="submitClaim(c)">Submit</button>
+                                <button class="btn btn-sm btn-danger" *ngIf="c.status === 'Draft'"
+                                    (click)="deleteClaim(c)">Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
