@@ -1,0 +1,145 @@
+<div class="page">
+    <div class="page-header">
+        <h2>
+            <a routerLink="/claims" style="color:#4a90d9; text-decoration:none">Claims</a>
+            &nbsp;/&nbsp;Claim Detail
+        </h2>
+        <span *ngIf="claim"><span [class]="getBadge(claim.status)">{{ claim.status }}</span></span>
+    </div>
+
+    <div *ngIf="loading" class="empty-state">Loading...</div>
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+
+    <ng-container *ngIf="!loading && claim">
+        <!-- Claim summary -->
+        <div class="card">
+            <div class="card-title">Claim Information</div>
+            <div class="form-row">
+                <div>
+                    <p class="text-muted">Description</p>
+                    <p style="margin-top:4px; font-weight:500">{{ claim.description }}</p>
+                </div>
+                <div>
+                    <p class="text-muted">Total Amount</p>
+                    <p style="margin-top:4px; font-weight:700; font-size:18px; color:#1a2340">
+                        {{ claim.currency }} {{ claim.totalAmount | number:'1.2-2' }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-muted">Submitted</p>
+                    <p style="margin-top:4px">{{ claim.submissionDate ? (claim.submissionDate | date:'dd MMM yyyy') :
+                        'Not yet submitted' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Items -->
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px">
+                <div class="card-title" style="margin-bottom:0">Expense Items</div>
+                <button class="btn btn-primary btn-sm" *ngIf="claim.status === 'Draft'"
+                    (click)="showItemForm = !showItemForm">
+                    {{ showItemForm ? 'Cancel' : '+ Add Item' }}
+                </button>
+            </div>
+
+            <!-- Add/Edit item form -->
+            <div *ngIf="showItemForm" style="background:#f4f6f9; border-radius:6px; padding:16px; margin-bottom:16px">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select [(ngModel)]="itemForm.category">
+                            <option *ngFor="let c of categories" [value]="c">{{ c }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount ({{ claim.currency }})</label>
+                        <input type="number" [(ngModel)]="itemForm.amount" min="0.01" step="0.01">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Expense Date</label>
+                        <input type="date" [(ngModel)]="itemForm.expenseDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Receipt Required</label>
+                        <select [(ngModel)]="itemForm.receiptRequired">
+                            <option [ngValue]="true">Yes</option>
+                            <option [ngValue]="false">No</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" [(ngModel)]="itemForm.itemDescription"
+                        placeholder="e.g. Train London to Birmingham return">
+                </div>
+                <div class="alert alert-error" *ngIf="itemFormError">{{ itemFormError }}</div>
+                <div class="btn-group">
+                    <button class="btn btn-success" (click)="saveItem()" [disabled]="savingItem">
+                        {{ savingItem ? 'Saving...' : (editingItem ? 'Update Item' : 'Add Item') }}
+                    </button>
+                    <button class="btn btn-secondary" (click)="cancelItemForm()">Cancel</button>
+                </div>
+            </div>
+
+            <div class="empty-state" *ngIf="items.length === 0 && !showItemForm">No items added yet.</div>
+            <div class="table-wrap" *ngIf="items.length > 0">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Receipt</th>
+                            <th *ngIf="claim.status === 'Draft'">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of items">
+                            <td>{{ item.category }}</td>
+                            <td>{{ item.itemDescription }}</td>
+                            <td>{{ item.expenseDate | date:'dd MMM yyyy' }}</td>
+                            <td>{{ claim.currency }} {{ item.amount | number:'1.2-2' }}</td>
+                            <td>{{ item.receiptRequired ? 'Yes' : 'No' }}</td>
+                            <td *ngIf="claim.status === 'Draft'">
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-warning" (click)="editItem(item)">Edit</button>
+                                    <button class="btn btn-sm btn-danger" (click)="deleteItem(item)">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Workflow steps -->
+        <div class="card" *ngIf="workflow.length > 0">
+            <div class="card-title">Approval Workflow</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Step</th>
+                        <th>Approver</th>
+                        <th>Decision</th>
+                        <th>Date</th>
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let w of workflow">
+                        <td>{{ w.stepNumber }}</td>
+                        <td>{{ getApproverName(w) }}</td>
+                        <td><span [class]="getDecisionBadge(w.decision)">{{ w.decision }}</span></td>
+                        <td>{{ w.decisionDate ? (w.decisionDate | date:'dd MMM yyyy') : '—' }}</td>
+                        <td>{{ w.comments || '—' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+</div>

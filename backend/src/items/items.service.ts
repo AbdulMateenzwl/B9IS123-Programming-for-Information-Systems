@@ -8,9 +8,21 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Item, ItemDocument } from './schemas/item.schema';
-import { Claim, ClaimDocument, ClaimStatus } from '../claims/schemas/claim.schema';
+import {
+  Claim,
+  ClaimDocument,
+  ClaimStatus,
+} from '../claims/schemas/claim.schema';
 import { UserRole } from '../users/schemas/user.schema';
-import { IsEnum, IsNumber, IsString, IsDateString, IsBoolean, IsOptional, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsNumber,
+  IsString,
+  IsDateString,
+  IsBoolean,
+  IsOptional,
+  Min,
+} from 'class-validator';
 import { ExpenseCategory } from './schemas/item.schema';
 
 export class CreateItemDto {
@@ -33,17 +45,32 @@ export class CreateItemDto {
 }
 
 export class UpdateItemDto {
+  @IsOptional()
+  @IsEnum(ExpenseCategory)
   category?: ExpenseCategory;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0.01)
   amount?: number;
+
+  @IsOptional()
+  @IsDateString()
   expenseDate?: string;
+
+  @IsOptional()
+  @IsString()
   itemDescription?: string;
+
+  @IsOptional()
+  @IsBoolean()
   receiptRequired?: boolean;
 }
 
 @Injectable()
 export class ItemsService {
   constructor(
-    @InjectModel(Item.name)  private itemModel: Model<ItemDocument>,
+    @InjectModel(Item.name) private itemModel: Model<ItemDocument>,
     @InjectModel(Claim.name) private claimModel: Model<ClaimDocument>,
   ) {}
 
@@ -70,7 +97,12 @@ export class ItemsService {
     return item;
   }
 
-  async update(claimId: string, itemId: string, dto: UpdateItemDto, currentUser: any) {
+  async update(
+    claimId: string,
+    itemId: string,
+    dto: UpdateItemDto,
+    currentUser: any,
+  ) {
     const claim = await this.claimModel.findById(claimId);
     if (!claim) throw new NotFoundException('Claim not found.');
 
@@ -79,7 +111,10 @@ export class ItemsService {
 
     const item = await this.itemModel.findOneAndUpdate(
       { _id: itemId, claimId },
-      { ...dto, ...(dto.expenseDate && { expenseDate: new Date(dto.expenseDate) }) },
+      {
+        ...dto,
+        ...(dto.expenseDate && { expenseDate: new Date(dto.expenseDate) }),
+      },
       { new: true },
     );
     if (!item) throw new NotFoundException('Item not found.');
@@ -95,7 +130,10 @@ export class ItemsService {
     this.assertOwner(claim, currentUser);
     this.assertEditable(claim);
 
-    const item = await this.itemModel.findOneAndDelete({ _id: itemId, claimId });
+    const item = await this.itemModel.findOneAndDelete({
+      _id: itemId,
+      claimId,
+    });
     if (!item) throw new NotFoundException('Item not found.');
 
     await this.syncClaimTotal(claimId);
@@ -111,7 +149,9 @@ export class ItemsService {
 
   private assertEditable(claim: ClaimDocument) {
     if (claim.status !== ClaimStatus.DRAFT) {
-      throw new UnprocessableEntityException('Items can only be modified on Draft claims.');
+      throw new UnprocessableEntityException(
+        'Items can only be modified on Draft claims.',
+      );
     }
   }
 
