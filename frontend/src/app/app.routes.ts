@@ -24,6 +24,11 @@ export const routes: Routes = [
         path: 'claims/:id',
         loadComponent: () => import('./pages/items/items').then((m) => m.ItemsComponent),
       },
+      {
+        path: 'workflow',
+        loadComponent: () =>
+          import('./pages/workflow/workflow').then((m) => m.WorkflowComponent),
+      },
     ],
   },
   { path: '**', redirectTo: 'dashboard' },
