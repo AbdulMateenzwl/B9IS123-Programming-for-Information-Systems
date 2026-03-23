@@ -6,18 +6,34 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Department, DepartmentDocument } from './schemas/department.schema';
-import { IsString } from 'class-validator';
+import { IsString, IsOptional, IsBoolean } from 'class-validator';
 
 export class CreateDepartmentDto {
+  @IsString()
   departmentName: string;
+
+  @IsString()
   location: string;
+
+  @IsString()
   managerName: string;
 }
 
 export class UpdateDepartmentDto {
+  @IsOptional()
+  @IsString()
   departmentName?: string;
+
+  @IsOptional()
+  @IsString()
   location?: string;
+
+  @IsOptional()
+  @IsString()
   managerName?: string;
+
+  @IsOptional()
+  @IsBoolean()
   isActive?: boolean;
 }
 

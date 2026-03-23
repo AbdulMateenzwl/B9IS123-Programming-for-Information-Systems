@@ -32,6 +32,11 @@ export const routes: Routes = [
         path: 'users',
         loadComponent: () => import('./pages/users/users').then((m) => m.UsersComponent),
       },
+      {
+        path: 'departments',
+        loadComponent: () =>
+          import('./pages/departments/departments').then((m) => m.DepartmentsComponent),
+      },
     ],
   },
   { path: '**', redirectTo: 'dashboard' },

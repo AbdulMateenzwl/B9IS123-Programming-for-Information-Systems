@@ -1,0 +1,70 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Department Management</h2>
+        <button class="btn btn-primary" (click)="openCreate()">+ New Department</button>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+
+    <!-- Create / Edit form -->
+    <div class="card" *ngIf="showForm">
+        <div class="card-title">{{ editingDept ? 'Edit Department' : 'Create Department' }}</div>
+        <div class="alert alert-error" *ngIf="formError">{{ formError }}</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Department Name</label>
+                <input type="text" [(ngModel)]="form.departmentName" placeholder="e.g. Audit & Assurance">
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" [(ngModel)]="form.location" placeholder="e.g. London">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Manager Name</label>
+            <input type="text" [(ngModel)]="form.managerName" placeholder="e.g. Sarah Mitchell">
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-success" (click)="saveDept()" [disabled]="saving">
+                {{ saving ? 'Saving...' : (editingDept ? 'Update' : 'Create') }}
+            </button>
+            <button class="btn btn-secondary" (click)="cancelForm()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+        <div *ngIf="loading" class="empty-state">Loading departments...</div>
+        <div class="table-wrap" *ngIf="!loading">
+            <div class="empty-state" *ngIf="departments.length === 0">No departments found.</div>
+            <table *ngIf="departments.length > 0">
+                <thead>
+                    <tr>
+                        <th>Department Name</th>
+                        <th>Location</th>
+                        <th>Manager</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let d of departments">
+                        <td>{{ d.departmentName }}</td>
+                        <td>{{ d.location }}</td>
+                        <td>{{ d.managerName }}</td>
+                        <td>
+                            <span class="badge" [class.badge-approved]="d.isActive"
+                                [class.badge-rejected]="!d.isActive">
+                                {{ d.isActive ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" (click)="openEdit(d)">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
