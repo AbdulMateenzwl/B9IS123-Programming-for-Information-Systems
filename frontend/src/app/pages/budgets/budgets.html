@@ -1,0 +1,112 @@
+<div class="page">
+    <div class="page-header">
+        <h2>Budget Management</h2>
+        <button class="btn btn-primary" (click)="openCreate()">+ New Budget</button>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+
+    <!-- Filter -->
+    <div class="card" style="padding:12px 20px">
+        <div style="display:flex; gap:12px; align-items:center">
+            <label style="font-size:12px; font-weight:600; color:#555">Fiscal Year:</label>
+            <select [(ngModel)]="filterYear" (change)="load()"
+                style="padding:5px 8px; border:1px solid #d0d5dd; border-radius:4px; font-size:13px">
+                <option value="">All Years</option>
+                <option *ngFor="let y of years" [value]="y">{{ y }}</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Summary stats -->
+    <div class="stats-grid" *ngIf="budgets.length > 0">
+        <div class="stat-box blue">
+            <div class="stat-value">£{{ totalBudget | number:'1.2-2' }}</div>
+            <div class="stat-label">Total Allocated</div>
+        </div>
+        <div class="stat-box orange">
+            <div class="stat-value">£{{ totalSpent | number:'1.2-2' }}</div>
+            <div class="stat-label">Total Spent</div>
+        </div>
+        <div class="stat-box green">
+            <div class="stat-value">£{{ totalRemaining | number:'1.2-2' }}</div>
+            <div class="stat-label">Remaining</div>
+        </div>
+        <div class="stat-box purple">
+            <div class="stat-value">{{ overallPct }}%</div>
+            <div class="stat-label">Overall Used</div>
+        </div>
+    </div>
+
+    <!-- Create / Edit form -->
+    <div class="card" *ngIf="showForm">
+        <div class="card-title">{{ editingBudget ? 'Edit Budget' : 'Create Budget' }}</div>
+        <div class="alert alert-error" *ngIf="formError">{{ formError }}</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Department</label>
+                <select [(ngModel)]="form.departmentId" [disabled]="!!editingBudget">
+                    <option value="">— Select —</option>
+                    <option *ngFor="let d of departments" [value]="d._id">{{ d.departmentName }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fiscal Year</label>
+                <input type="number" [(ngModel)]="form.fiscalYear" [disabled]="!!editingBudget" min="2020" max="2030">
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Total Budget (£)</label>
+            <input type="number" [(ngModel)]="form.totalBudget" min="1" step="100">
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-success" (click)="saveBudget()" [disabled]="saving">
+                {{ saving ? 'Saving...' : (editingBudget ? 'Update Budget' : 'Create Budget') }}
+            </button>
+            <button class="btn btn-secondary" (click)="cancelForm()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+        <div *ngIf="loading" class="empty-state">Loading budgets...</div>
+        <div class="table-wrap" *ngIf="!loading">
+            <div class="empty-state" *ngIf="budgets.length === 0">No budgets found.</div>
+            <table *ngIf="budgets.length > 0">
+                <thead>
+                    <tr>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Total Budget</th>
+                        <th>Spent</th>
+                        <th>Remaining</th>
+                        <th>Utilisation</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let b of budgets">
+                        <td>{{ getDeptName(b) }}</td>
+                        <td>{{ b.fiscalYear }}</td>
+                        <td>£{{ b.totalBudget | number:'1.2-2' }}</td>
+                        <td>£{{ b.spentAmount | number:'1.2-2' }}</td>
+                        <td>£{{ (b.totalBudget - b.spentAmount) | number:'1.2-2' }}</td>
+                        <td style="min-width:120px">
+                            <div style="display:flex; align-items:center; gap:8px">
+                                <span>{{ getPct(b) }}%</span>
+                                <div class="progress-bar-wrap" style="flex:1">
+                                    <div class="progress-bar" [class.warn]="getPct(b) > 70"
+                                        [class.danger]="getPct(b) > 90" [style.width.%]="getPct(b)"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" (click)="openEdit(b)">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
