@@ -1,0 +1,130 @@
+<div class="page">
+    <div class="page-header">
+        <h2>User Management</h2>
+        <button class="btn btn-primary" (click)="openCreate()">+ New User</button>
+    </div>
+
+    <div *ngIf="error" class="alert alert-error">{{ error }}</div>
+    <div *ngIf="successMsg" class="alert alert-success">{{ successMsg }}</div>
+
+    <!-- Filter bar -->
+    <div class="card" style="padding:12px 20px">
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+            <label style="font-size:12px; font-weight:600; color:#555">Role:</label>
+            <select [(ngModel)]="filterRole" (change)="loadUsers()"
+                style="padding:5px 8px; border:1px solid #d0d5dd; border-radius:4px; font-size:13px">
+                <option value="">All Roles</option>
+                <option value="employee">Employee</option>
+                <option value="manager">Manager</option>
+                <option value="finance_officer">Finance Officer</option>
+                <option value="admin">Admin</option>
+            </select>
+            <label style="font-size:12px; font-weight:600; color:#555">Status:</label>
+            <select [(ngModel)]="filterActive" (change)="loadUsers()"
+                style="padding:5px 8px; border:1px solid #d0d5dd; border-radius:4px; font-size:13px">
+                <option value="">All</option>
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Create / Edit form -->
+    <div class="card" *ngIf="showForm">
+        <div class="card-title">{{ editingUser ? 'Edit User' : 'Create New User' }}</div>
+        <div class="alert alert-error" *ngIf="formError">{{ formError }}</div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" [(ngModel)]="form.firstName">
+            </div>
+            <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" [(ngModel)]="form.lastName">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" [(ngModel)]="form.email" [disabled]="!!editingUser">
+            </div>
+            <div class="form-group">
+                <label>Job Title</label>
+                <input type="text" [(ngModel)]="form.jobTitle">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Role</label>
+                <select [(ngModel)]="form.role">
+                    <option value="employee">Employee</option>
+                    <option value="manager">Manager</option>
+                    <option value="finance_officer">Finance Officer</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Department</label>
+                <select [(ngModel)]="form.departmentId">
+                    <option value="">— Select —</option>
+                    <option *ngFor="let d of departments" [value]="d._id">{{ d.departmentName }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-row" *ngIf="!editingUser">
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" [(ngModel)]="form.password" placeholder="Min 8 characters">
+            </div>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-success" (click)="saveUser()" [disabled]="saving">
+                {{ saving ? 'Saving...' : (editingUser ? 'Update User' : 'Create User') }}
+            </button>
+            <button class="btn btn-secondary" (click)="cancelForm()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+        <div *ngIf="loading" class="empty-state">Loading users...</div>
+        <div class="table-wrap" *ngIf="!loading">
+            <div class="empty-state" *ngIf="users.length === 0">No users found.</div>
+            <table *ngIf="users.length > 0">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Job Title</th>
+                        <th>Role</th>
+                        <th>Department</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let u of users">
+                        <td>{{ u.firstName }} {{ u.lastName }}</td>
+                        <td>{{ u.email }}</td>
+                        <td>{{ u.jobTitle }}</td>
+                        <td><span [class]="getRoleBadge(u.role)">{{ u.role | titlecase }}</span></td>
+                        <td>{{ getDeptName(u) }}</td>
+                        <td>
+                            <span class="badge" [class.badge-approved]="u.isActive"
+                                [class.badge-rejected]="!u.isActive">
+                                {{ u.isActive ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-warning" (click)="openEdit(u)">Edit</button>
+                                <button class="btn btn-sm btn-danger" *ngIf="u.isActive"
+                                    (click)="deactivate(u)">Deactivate</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

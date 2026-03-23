@@ -26,8 +26,11 @@ export const routes: Routes = [
       },
       {
         path: 'workflow',
-        loadComponent: () =>
-          import('./pages/workflow/workflow').then((m) => m.WorkflowComponent),
+        loadComponent: () => import('./pages/workflow/workflow').then((m) => m.WorkflowComponent),
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./pages/users/users').then((m) => m.UsersComponent),
       },
     ],
   },
