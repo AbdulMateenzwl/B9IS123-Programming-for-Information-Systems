@@ -27,3 +27,7 @@
 - Commit 39
   - [Angular Documentation (Guards & Interceptors)](https://angular.dev/guide/routing/route-guards)
   - [RxJS Documentation (BehaviorSubject)](https://rxjs.dev/api/index/class/BehaviorSubject)
+
+- Commit 47
+  - [Docker Documentation (Multi-stage Builds & Networking)](https://docs.docker.com/build/buildkit/)
+  - [Nginx Guide (Reverse Proxy & Load Balancing)](https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/)

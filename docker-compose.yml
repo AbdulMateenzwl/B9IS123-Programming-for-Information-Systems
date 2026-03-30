@@ -20,7 +20,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: backend
       dockerfile: Dockerfile
     container_name: deloitteedge-backend
     restart: unless-stopped
@@ -48,7 +48,7 @@ services:
 
   frontend:
     build:
-      context: ../frontend
+      context: frontend
       dockerfile: Dockerfile
     container_name: deloitteedge-frontend
     restart: unless-stopped
