@@ -337,11 +337,11 @@ Uploaded receipt files must be in one of the following formats: PDF, JPG, JPEG, 
 - Single Page Application built with Angular 21
 - Standalone components - no NgModule required
 - Angular Router handles all client-side navigation
-- HTTP calls made via Angular's`HttpClient`
+- HTTP calls made via Angular's `HttpClient`
 - JWT token attached to every request via a global HTTP interceptor
 - Auth guard protects routes - unauthenticated users redirected to login
 - Role-aware UI - menu items and pages shown based on logged-in user's role
-- Proxy configuration forwards all`/api` requests to port 3000 during development
+- Proxy configuration forwards all `/api` requests to port 3000 during development
 
 ### API Layer - NestJS REST API (Port 3000)
 
@@ -875,8 +875,7 @@ npm test -- claims.service.spec
 
 ### AI Usage
 
-This project was developed with the assistance of Claude (Anthropic) as a co-pilot tool, operating at **Level 3** of the institution's Generative AI Assessment Scale - AI-ASSISTED
-EDITING.
+This project was developed with the assistance of Claude (Anthropic) as a co-pilot tool, operating at **Level 3** of the institution's Generative AI Assessment Scale - AI-ASSISTED EDITING.
 
 #### What AI Was Used For
 
@@ -963,6 +962,7 @@ EDITING.
 ## 12. Dockerization & Deployment
 
 ### Overview
+
 - Full stack application containerised using Docker and Docker Compose
 - Three containers: MongoDB database, NestJS backend, Angular frontend
 - All containers communicate over a dedicated Docker bridge network
@@ -973,11 +973,11 @@ EDITING.
 
 ### Container Architecture
 
-| Container | Image | Port | Purpose |
-|-----------|-------|------|---------|
-| `deloitteedge-mongodb` | `mongo:7-jammy` | 27017 | MongoDB database |
-| `deloitteedge-backend` | Custom (Node.js 24) | 3000 | NestJS REST API |
-| `deloitteedge-frontend` | Custom (Nginx) | 8080 | Angular SPA served via Nginx |
+| Container               | Image               | Port  | Purpose                      |
+| ----------------------- | ------------------- | ----- | ---------------------------- |
+| `deloitteedge-mongodb`  | `mongo:7-jammy`     | 27017 | MongoDB database             |
+| `deloitteedge-backend`  | Custom (Node.js 24) | 3000  | NestJS REST API              |
+| `deloitteedge-frontend` | Custom (Nginx)      | 8080  | Angular SPA served via Nginx |
 
 All three containers are connected via a custom bridge network called `deloitteedge-network`, allowing them to reference each other by container name rather than IP address.
 
@@ -999,11 +999,13 @@ The backend uses a single-stage Node.js 24 image:
 The frontend uses a two-stage build:
 
 **Stage 1 - Builder:**
+
 - Node.js 24 base image
 - Uses `npm ci` with Docker layer caching (`--mount=type=cache`) for faster rebuilds
 - Runs `npm run build` to produce the compiled Angular static files
 
 **Stage 2 - Runner:**
+
 - Nginx base image
 - Copies the compiled static files from the builder stage into Nginx's HTML directory
 - Uses a custom `nginx.conf` for SPA routing and API proxying
@@ -1089,7 +1091,6 @@ docker compose up -d
 - class-transformer - MIT Licence - https://github.com/typestack/class-transformer
 - Multer - MIT Licence - https://github.com/expressjs/multer
 - RxJS - Apache-2.0 Licence - https://github.com/ReactiveX/rxjs
-- PptxGenJS - MIT Licence - https://github.com/gitbrent/PptxGenJS
 - zone.js - MIT Licence - https://github.com/angular/angular/tree/main/packages/zone.js
 
 ### Documentation & Learning Resources
@@ -1144,10 +1145,6 @@ docker compose up -d
 | GET    | `/api/dashboard/manager`        | Manager+ | Manager dashboard     |
 | GET    | `/api/dashboard/finance`        | Finance+ | Finance dashboard     |
 | GET    | `/api/dashboard/admin`          | Admin    | Admin dashboard       |
-| GET    | `/api/reports/by-department`    | Manager+ | Department spending   |
-| GET    | `/api/reports/by-employee`      | Manager+ | Employee spending     |
-| GET    | `/api/reports/by-category`      | Manager+ | Category spending     |
-| GET    | `/api/reports/monthly-trends`   | Manager+ | Monthly trends        |
 
 ---
 
@@ -1164,7 +1161,7 @@ docker compose up -d
 
 ### Prerequisites
 
-- Docker and Docker Compose installed
+- Docker installed
 - No other tools required
 
 ---
@@ -1192,9 +1189,9 @@ docker compose up -d
 
 This starts four containers:
 
-- `deloitteedge-mongodb` - MongoDB database on port`27017`
-- `deloitteedge-backend` - NestJS REST API on port`3000`
-- `deloitteedge-frontend` - Angular app served via nginx on port`4200`
+- `deloitteedge-mongodb` - MongoDB database on port `27017`
+- `deloitteedge-backend` - NestJS REST API on port `3000`
+- `deloitteedge-frontend` - Angular app served via nginx on port `4200`
 
 ---
 
