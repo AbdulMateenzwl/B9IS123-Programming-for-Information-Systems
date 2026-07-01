@@ -3,10 +3,14 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
+
+  // HTTP security headers — XSS, clickjacking, MIME sniffing, HSTS, etc.
+  app.use(helmet());
 
   // Global prefix
   app.setGlobalPrefix('api');

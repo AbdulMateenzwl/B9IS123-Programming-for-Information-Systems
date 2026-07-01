@@ -5,6 +5,7 @@ import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { UserRole } from '../users/schemas/user.schema';
+import { WorkflowDecideRateLimitGuard } from '../common/guards/user-rate-limit.guard';
 
 @Controller('workflow')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -32,6 +33,7 @@ export class WorkflowController {
   // POST /api/workflow/:claimId/decide
   @Post(':claimId/decide')
   @Roles(UserRole.MANAGER, UserRole.FINANCE_OFFICER, UserRole.ADMIN)
+  @UseGuards(WorkflowDecideRateLimitGuard)
   decide(
     @Param('claimId') claimId: string,
     @Body() dto: DecisionDto,

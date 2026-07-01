@@ -7,6 +7,7 @@ import { CreateClaimDto, UpdateClaimDto } from './dto/create-claim.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
+import { ClaimSubmitRateLimitGuard } from '../common/guards/user-rate-limit.guard';
 
 @Controller('claims')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -43,6 +44,7 @@ export class ClaimsController {
   }
 
   @Post(':id/submit')
+  @UseGuards(ClaimSubmitRateLimitGuard)
   submit(@Param('id') id: string, @CurrentUser() user: any): Promise<any> {
     return this.claimsService.submit(id, user);
   }

@@ -8,6 +8,7 @@ import { Claim, ClaimSchema } from '../claims/schemas/claim.schema';
 import { Budget, BudgetSchema } from '../budgets/schemas/budget.schema';
 import { User, UserSchema } from '../users/schemas/user.schema';
 import { Item, ItemSchema } from '../items/schemas/item.schema';
+import { WorkflowDecideRateLimitGuard } from '../common/guards/user-rate-limit.guard';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { Item, ItemSchema } from '../items/schemas/item.schema';
     ]),
   ],
   controllers: [WorkflowController],
-  providers: [WorkflowService],
+  providers: [WorkflowService, WorkflowDecideRateLimitGuard],
   exports: [WorkflowService],
 })
 export class WorkflowModule {}

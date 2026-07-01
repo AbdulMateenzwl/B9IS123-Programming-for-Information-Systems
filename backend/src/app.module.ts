@@ -1,7 +1,9 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { DepartmentsModule } from './departments/departments.module';
@@ -26,6 +28,15 @@ import { DashboardModule } from './dashboard/dashboard.module';
       }),
     }),
 
+    // Rate limiting — 60 requests per minute globally; login overrides to 5
+    ThrottlerModule.forRoot([
+      {
+        name: 'default',
+        ttl: 60000,
+        limit: 60,
+      },
+    ]),
+
     // Feature modules
     AuthModule,
     UsersModule,
@@ -36,6 +47,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
     ItemsModule,
     AttachmentsModule,
     DashboardModule,
+  ],
+  providers: [
+    // Apply rate limiting to every route globally
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
   ],
 })
 export class AppModule {}

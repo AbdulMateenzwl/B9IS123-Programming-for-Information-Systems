@@ -1,7 +1,15 @@
 <ng-container *ngIf="auth.isLoggedIn; else loginOutlet">
     <div class="app-shell">
-        <aside class="sidebar">
-            <div class="sidebar-logo">Deloitte<span>Edge</span></div>
+
+        <!-- Dark overlay — tapping it closes the sidebar on mobile -->
+        <div class="sidebar-overlay" [class.active]="sidebarOpen" (click)="sidebarOpen = false"></div>
+
+        <aside class="sidebar" [class.sidebar-open]="sidebarOpen">
+            <div class="sidebar-logo">
+                Deloitte<span>Edge</span>
+                <!-- Close button visible only on mobile -->
+                <button class="sidebar-close-btn" (click)="sidebarOpen = false" aria-label="Close menu">✕</button>
+            </div>
             <nav>
                 <a routerLink="/dashboard" routerLinkActive="active">📊 Dashboard</a>
                 <a routerLink="/claims" routerLinkActive="active">📋 My Claims</a>
@@ -16,9 +24,16 @@
                 <button (click)="auth.logout()">Sign Out</button>
             </div>
         </aside>
+
         <div class="main-content">
+            <!-- Mobile top bar — hidden on desktop -->
+            <div class="mobile-topbar">
+                <button class="hamburger-btn" (click)="sidebarOpen = !sidebarOpen" aria-label="Open menu">☰</button>
+                <span class="mobile-logo">Deloitte<span>Edge</span></span>
+            </div>
             <router-outlet></router-outlet>
         </div>
+
     </div>
 </ng-container>
 <ng-template #loginOutlet>

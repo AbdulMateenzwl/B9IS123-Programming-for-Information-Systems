@@ -6,6 +6,7 @@ import { Claim, ClaimSchema } from './schemas/claim.schema';
 import { Item, ItemSchema } from '../items/schemas/item.schema';
 import { Workflow, WorkflowSchema } from '../workflow/schemas/workflow.schema';
 import { Attachment, AttachmentSchema } from '../attachments/schemas/attachment.schema';
+import { ClaimSubmitRateLimitGuard } from '../common/guards/user-rate-limit.guard';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { Attachment, AttachmentSchema } from '../attachments/schemas/attachment.
     ]),
   ],
   controllers: [ClaimsController],
-  providers: [ClaimsService],
+  providers: [ClaimsService, ClaimSubmitRateLimitGuard],
   exports: [ClaimsService, MongooseModule],
 })
 export class ClaimsModule {}

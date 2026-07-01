@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs/operators';
 import { AuthService } from './core/services/auth.service';
 
 @Component({
@@ -9,8 +10,18 @@ import { AuthService } from './core/services/auth.service';
   imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
   templateUrl: './app.html',
 })
-export class App {
-  constructor(public auth: AuthService) {}
+export class App implements OnInit {
+  sidebarOpen = false;
+
+  constructor(public auth: AuthService, private router: Router) {}
+
+  ngOnInit() {
+    // Close sidebar automatically whenever the route changes (mobile UX)
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe(() => { this.sidebarOpen = false; });
+  }
+
   get isAdmin() {
     return this.auth.hasRole('admin');
   }
