@@ -489,3 +489,192 @@ table tr:hover td {
 .progress-bar.danger {
     background: #c0392b;
 }
+
+/* ── Mobile top bar ───────────────────────────────────────────────────────── */
+.mobile-topbar {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    background: #1a2340;
+    padding: 12px 16px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.mobile-logo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.3px;
+}
+
+.mobile-logo span {
+    color: #4a90d9;
+}
+
+.hamburger-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 2px 6px;
+    line-height: 1;
+    border-radius: 4px;
+}
+
+.hamburger-btn:hover {
+    background: #253050;
+}
+
+/* ── Sidebar close button (mobile only) ───────────────────────────────────── */
+.sidebar-close-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: #cdd4e0;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 2px 6px;
+    border-radius: 4px;
+    line-height: 1;
+}
+
+.sidebar-close-btn:hover {
+    background: #2e3a56;
+    color: #fff;
+}
+
+/* ── Sidebar overlay (mobile only) ───────────────────────────────────────── */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+}
+
+/* ── Tablet (≤ 768px) ────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    /* Show mobile topbar */
+    .mobile-topbar {
+        display: flex;
+    }
+
+    /* Show close button inside sidebar */
+    .sidebar-close-btn {
+        display: block;
+    }
+
+    /* Sidebar slides in from the left as a drawer */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        width: 240px;
+    }
+
+    .sidebar.sidebar-open {
+        transform: translateX(0);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Overlay visible only when sidebar is open */
+    .sidebar-overlay.active {
+        display: block;
+    }
+
+    /* Main content takes full width */
+    .main-content {
+        width: 100%;
+    }
+
+    /* Stack two-column form rows to one column */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Tighter page padding */
+    .page {
+        padding: 16px;
+    }
+
+    /* Page header stacks vertically */
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* Slightly smaller stat boxes */
+    .stats-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 10px;
+    }
+
+    /* Tighter card padding */
+    .card {
+        padding: 16px;
+    }
+
+    /* Login box full-width with margin */
+    .login-box {
+        width: calc(100% - 32px);
+        max-width: 400px;
+    }
+}
+
+/* ── Small mobile (≤ 480px) ──────────────────────────────────────────────── */
+@media (max-width: 480px) {
+    /* Two-column stat grid */
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+
+    /* Smaller stat value text */
+    .stat-box .stat-value {
+        font-size: 20px;
+    }
+
+    .stat-box {
+        padding: 12px;
+    }
+
+    /* Stack button groups vertically */
+    .btn-group {
+        flex-direction: column;
+    }
+
+    .btn-group .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Tighter table cells */
+    table {
+        font-size: 12px;
+    }
+
+    table th,
+    table td {
+        padding: 8px 6px;
+    }
+
+    /* Login box full-width */
+    .login-box {
+        width: 100%;
+        margin: 0 16px;
+        padding: 24px 20px;
+    }
+
+    .page {
+        padding: 12px;
+    }
+}
