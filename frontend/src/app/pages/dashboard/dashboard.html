@@ -7,6 +7,7 @@
     <div *ngIf="loading" class="empty-state">Loading dashboard...</div>
     <div *ngIf="error" class="alert alert-error">{{ error }}</div>
 
+    <!-- ── Employee ─────────────────────────────────────────────────────────── -->
     <ng-container *ngIf="!loading && role === 'employee' && employeeData">
         <div class="stats-grid">
             <div class="stat-box">
@@ -69,26 +70,30 @@
                 <div *ngIf="employeeData.spendByCategory.length === 0" class="empty-state">
                     No approved spend yet
                 </div>
-                <table *ngIf="employeeData.spendByCategory.length > 0">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Items</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let c of employeeData.spendByCategory">
-                            <td>{{ c.category }}</td>
-                            <td>{{ c.itemCount }}</td>
-                            <td>£{{ c.totalSpend | number: '1.2-2' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ng-container *ngIf="employeeData.spendByCategory.length > 0">
+                    <canvas #employeeCategoryCanvas></canvas>
+                    <table class="mt-16">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let c of employeeData.spendByCategory">
+                                <td>{{ c.category }}</td>
+                                <td>{{ c.itemCount }}</td>
+                                <td>£{{ c.totalSpend | number: '1.2-2' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
             </div>
         </div>
     </ng-container>
 
+    <!-- ── Manager ──────────────────────────────────────────────────────────── -->
     <ng-container *ngIf="!loading && role === 'manager' && managerData">
         <div class="stats-grid">
             <div class="stat-box red">
@@ -115,34 +120,41 @@
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-title">My Pending Approvals</div>
-            <div *ngIf="managerData.pendingApprovals.length === 0" class="empty-state">
-                No pending approvals
+        <div class="form-row">
+            <div class="card">
+                <div class="card-title">My Pending Approvals</div>
+                <div *ngIf="managerData.pendingApprovals.length === 0" class="empty-state">
+                    No pending approvals
+                </div>
+                <table *ngIf="managerData.pendingApprovals.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Claim</th>
+                            <th>Employee</th>
+                            <th>Amount</th>
+                            <th>Step</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let w of managerData.pendingApprovals">
+                            <td>{{ getClaim(w)?.description }}</td>
+                            <td>{{ getEmployee(w) }}</td>
+                            <td>£{{ getClaim(w)?.totalAmount | number: '1.2-2' }}</td>
+                            <td>Step {{ w.stepNumber }}</td>
+                            <td><a [routerLink]="['/workflow']" class="btn btn-sm btn-primary">Review</a></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <table *ngIf="managerData.pendingApprovals.length > 0">
-                <thead>
-                    <tr>
-                        <th>Claim</th>
-                        <th>Employee</th>
-                        <th>Amount</th>
-                        <th>Step</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let w of managerData.pendingApprovals">
-                        <td>{{ getClaim(w)?.description }}</td>
-                        <td>{{ getEmployee(w) }}</td>
-                        <td>£{{ getClaim(w)?.totalAmount | number: '1.2-2' }}</td>
-                        <td>Step {{ w.stepNumber }}</td>
-                        <td><a [routerLink]="['/workflow']" class="btn btn-sm btn-primary">Review</a></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="card">
+                <div class="card-title">Claim Status Overview</div>
+                <canvas #managerStatusCanvas></canvas>
+            </div>
         </div>
     </ng-container>
 
+    <!-- ── Finance Officer ──────────────────────────────────────────────────── -->
     <ng-container *ngIf="!loading && role === 'finance_officer' && financeData">
         <div class="stats-grid">
             <div class="stat-box blue">
@@ -162,8 +174,16 @@
                 <div class="stat-label">Pending Steps</div>
             </div>
         </div>
-        <div class="card">
+
+        <div class="card" *ngIf="financeData.budgetOverview.length > 0">
             <div class="card-title">Budget Utilisation by Department</div>
+            <div class="chart-container" style="position:relative; height:220px;">
+                <canvas #financeBudgetCanvas></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Budget Breakdown</div>
             <table>
                 <thead>
                     <tr>
@@ -193,6 +213,7 @@
         </div>
     </ng-container>
 
+    <!-- ── Admin ────────────────────────────────────────────────────────────── -->
     <ng-container *ngIf="!loading && role === 'admin' && adminData">
         <div class="stats-grid">
             <div class="stat-box blue">
@@ -222,7 +243,8 @@
         <div class="form-row">
             <div class="card">
                 <div class="card-title">Claims by Status</div>
-                <table>
+                <canvas #adminStatusCanvas></canvas>
+                <table class="mt-16">
                     <tbody>
                         <tr>
                             <td>Draft</td>
@@ -252,22 +274,27 @@
                 <div *ngIf="adminData.topSpendersThisYear.length === 0" class="empty-state">
                     No approved spend yet
                 </div>
-                <table *ngIf="adminData.topSpendersThisYear.length > 0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Claims</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let s of adminData.topSpendersThisYear">
-                            <td>{{ s.firstName }} {{ s.lastName }}</td>
-                            <td>{{ s.claimCount }}</td>
-                            <td>£{{ s.totalSpend | number: '1.2-2' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <ng-container *ngIf="adminData.topSpendersThisYear.length > 0">
+                    <div style="position:relative; height:180px;">
+                        <canvas #adminSpendersCanvas></canvas>
+                    </div>
+                    <table class="mt-16">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Claims</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let s of adminData.topSpendersThisYear">
+                                <td>{{ s.firstName }} {{ s.lastName }}</td>
+                                <td>{{ s.claimCount }}</td>
+                                <td>£{{ s.totalSpend | number: '1.2-2' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
             </div>
         </div>
     </ng-container>

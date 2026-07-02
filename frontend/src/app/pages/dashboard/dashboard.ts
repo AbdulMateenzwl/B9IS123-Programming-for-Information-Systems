@@ -1,4 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  AfterViewChecked,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -9,6 +16,7 @@ import {
   FinanceDashboard,
   ManagerDashboard,
 } from '../../core/models/models';
+import { Chart } from 'chart.js/auto';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +24,7 @@ import {
   imports: [CommonModule, RouterLink],
   templateUrl: './dashboard.html',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy, AfterViewChecked {
   loading = true;
   error = '';
   role = '';
@@ -25,6 +33,36 @@ export class DashboardComponent implements OnInit {
   managerData?: ManagerDashboard;
   financeData?: FinanceDashboard;
   adminData?: AdminDashboard;
+
+  @ViewChild('employeeCategoryCanvas') employeeCategoryCanvas?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('managerStatusCanvas') managerStatusCanvas?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('financeBudgetCanvas') financeBudgetCanvas?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('adminStatusCanvas') adminStatusCanvas?: ElementRef<HTMLCanvasElement>;
+  @ViewChild('adminSpendersCanvas') adminSpendersCanvas?: ElementRef<HTMLCanvasElement>;
+
+  private charts: Chart[] = [];
+
+  private readonly PALETTE = [
+    '#2980b9',
+    '#27ae60',
+    '#e67e22',
+    '#c0392b',
+    '#8e44ad',
+    '#1abc9c',
+    '#f39c12',
+    '#d35400',
+    '#2c3e50',
+    '#16a085',
+  ];
+
+  private chartsInitialized = false;
+
+  ngAfterViewChecked() {
+    if (!this.loading && !this.chartsInitialized) {
+      this.initCharts();
+      this.chartsInitialized = true;
+    }
+  }
 
   constructor(
     public auth: AuthService,
@@ -73,6 +111,131 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       })
     )();
+  }
+
+  ngOnDestroy() {
+    this.charts.forEach((c) => c.destroy());
+    this.charts = [];
+  }
+
+  private initCharts() {
+    this.charts.forEach((c) => c.destroy());
+    this.charts = [];
+
+    // Employee — spend by category doughnut
+    if (this.employeeCategoryCanvas && this.employeeData?.spendByCategory.length) {
+      this.charts.push(
+        new Chart(this.employeeCategoryCanvas.nativeElement, {
+          type: 'doughnut',
+          data: {
+            labels: this.employeeData.spendByCategory.map((c) => c.category),
+            datasets: [
+              {
+                data: this.employeeData.spendByCategory.map((c) => c.totalSpend),
+                backgroundColor: this.PALETTE.slice(0, this.employeeData.spendByCategory.length),
+              },
+            ],
+          },
+          options: { plugins: { legend: { position: 'bottom' } } },
+        }),
+      );
+    }
+
+    // Manager — system claim status doughnut
+    if (this.managerStatusCanvas && this.managerData) {
+      const s = this.managerData.systemClaimSummary;
+      this.charts.push(
+        new Chart(this.managerStatusCanvas.nativeElement, {
+          type: 'doughnut',
+          data: {
+            labels: ['Submitted', 'Under Review', 'Approved', 'Rejected'],
+            datasets: [
+              {
+                data: [s.submitted, s.underReview, s.approved, s.rejected],
+                backgroundColor: ['#2980b9', '#e67e22', '#27ae60', '#c0392b'],
+              },
+            ],
+          },
+          options: { plugins: { legend: { position: 'bottom' } } },
+        }),
+      );
+    }
+
+    // Finance — budget utilisation horizontal stacked bar
+    if (this.financeBudgetCanvas && this.financeData?.budgetOverview.length) {
+      const depts = this.financeData.budgetOverview;
+      this.charts.push(
+        new Chart(this.financeBudgetCanvas.nativeElement, {
+          type: 'bar',
+          data: {
+            labels: depts.map((d) => d.department.departmentName),
+            datasets: [
+              {
+                label: 'Spent (£)',
+                data: depts.map((d) => d.spentAmount),
+                backgroundColor: '#c0392b',
+              },
+              {
+                label: 'Remaining (£)',
+                data: depts.map((d) => d.remainingBudget),
+                backgroundColor: '#27ae60',
+              },
+            ],
+          },
+          options: {
+            indexAxis: 'y',
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'top' } },
+            scales: { x: { stacked: true }, y: { stacked: true } },
+          },
+        }),
+      );
+    }
+
+    // Admin — claims by status doughnut
+    if (this.adminStatusCanvas && this.adminData) {
+      const c = this.adminData.claims;
+      this.charts.push(
+        new Chart(this.adminStatusCanvas.nativeElement, {
+          type: 'doughnut',
+          data: {
+            labels: ['Draft', 'Submitted', 'Under Review', 'Approved', 'Rejected'],
+            datasets: [
+              {
+                data: [c.draft, c.submitted, c.underReview, c.approved, c.rejected],
+                backgroundColor: ['#95a5a6', '#2980b9', '#e67e22', '#27ae60', '#c0392b'],
+              },
+            ],
+          },
+          options: { plugins: { legend: { position: 'bottom' } } },
+        }),
+      );
+    }
+
+    // Admin — top spenders bar chart
+    if (this.adminSpendersCanvas && this.adminData?.topSpendersThisYear.length) {
+      const spenders = this.adminData.topSpendersThisYear;
+      this.charts.push(
+        new Chart(this.adminSpendersCanvas.nativeElement, {
+          type: 'bar',
+          data: {
+            labels: spenders.map((s) => `${s.firstName} ${s.lastName}`),
+            datasets: [
+              {
+                label: 'Total Spend (£)',
+                data: spenders.map((s) => s.totalSpend),
+                backgroundColor: '#8e44ad',
+              },
+            ],
+          },
+          options: {
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true } },
+          },
+        }),
+      );
+    }
   }
 
   handleError(e: any) {
