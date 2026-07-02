@@ -43,16 +43,16 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewChecked {
   private charts: Chart[] = [];
 
   private readonly PALETTE = [
-    '#2980b9',
-    '#27ae60',
-    '#e67e22',
-    '#c0392b',
-    '#8e44ad',
-    '#1abc9c',
-    '#f39c12',
-    '#d35400',
-    '#2c3e50',
-    '#16a085',
+    '#007aff',
+    '#34c759',
+    '#ff9500',
+    '#ff3b30',
+    '#af52de',
+    '#30b0c7',
+    '#ffcc00',
+    '#ff2d55',
+    '#5856d6',
+    '#00c7be',
   ];
 
   private chartsInitialized = false;
@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewChecked {
             datasets: [
               {
                 data: [s.submitted, s.underReview, s.approved, s.rejected],
-                backgroundColor: ['#2980b9', '#e67e22', '#27ae60', '#c0392b'],
+                backgroundColor: ['#007aff', '#ff9500', '#34c759', '#ff3b30'],
               },
             ],
           },
@@ -173,12 +173,12 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewChecked {
               {
                 label: 'Spent (£)',
                 data: depts.map((d) => d.spentAmount),
-                backgroundColor: '#c0392b',
+                backgroundColor: '#ff3b30',
               },
               {
                 label: 'Remaining (£)',
                 data: depts.map((d) => d.remainingBudget),
-                backgroundColor: '#27ae60',
+                backgroundColor: '#34c759',
               },
             ],
           },
@@ -203,7 +203,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewChecked {
             datasets: [
               {
                 data: [c.draft, c.submitted, c.underReview, c.approved, c.rejected],
-                backgroundColor: ['#95a5a6', '#2980b9', '#e67e22', '#27ae60', '#c0392b'],
+                backgroundColor: ['#8e8e93', '#007aff', '#ff9500', '#34c759', '#ff3b30'],
               },
             ],
           },
@@ -224,7 +224,7 @@ export class DashboardComponent implements OnInit, OnDestroy, AfterViewChecked {
               {
                 label: 'Total Spend (£)',
                 data: spenders.map((s) => s.totalSpend),
-                backgroundColor: '#8e44ad',
+                backgroundColor: '#af52de',
               },
             ],
           },
