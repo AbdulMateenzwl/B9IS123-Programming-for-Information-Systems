@@ -6,15 +6,15 @@
 
 **Student ID:** 20093908
 
-**Programme:** Masters of Information Systems and Computing
+**Programme:** MSc in Information Systems and Computing
 
-**Module:** Programming for information Systems and Computing
+**Module:** B9IS130 – Web Development for Information Systems
 
-**Lecturer:** Paul Laird
+**Lecturer:** Dr. Obinna Izima
 
-**Assignment Title:** Information System Design & Implementation
+**Assignment Title:** Web Application on a Topic of Your Choice
 
-**Date:** 12 April 2026
+**Date:** 2 July 2026
 
 ## Table of Contents
 
@@ -884,6 +884,7 @@ This project was developed with the assistance of Claude (Anthropic) as a co-pil
 - Generating the Bruno API testing collection
 - Suggesting fixes for TypeScript compilation errors
 - Writing the seed script for demo data
+- GitHub Copilot Chat was additionally used for guidance on implementing role-based access control in NestJS (see Commit 5 in the commit-by-commit references)
 
 #### How AI Output Was Used
 
@@ -926,10 +927,9 @@ This project was developed with the assistance of Claude (Anthropic) as a co-pil
 
 #### 2. Docker Networking Issue
 
-- Initial project used MSSQL with Docker
-- Init container used`localhost` as hostname - could not reach the SQL Server container
-- Containers on the same Docker network must reference each other by service name
-- **Fix:** Changed hostname from`localhost` to`deloitteedge-sqlserver`
+- During early prototyping (before settling on MongoDB), the database container could not be reached using `localhost` as the hostname
+- Containers on the same Docker network must reference each other by service name, not `localhost`
+- **Fix:** Referenced the database by its Docker Compose service name - the same principle is applied in the final stack, where the backend connects to MongoDB via the `deloitteedge-mongodb` service name
 
 ---
 
@@ -1072,7 +1072,7 @@ docker compose up -d
 - API fully tested end-to-end using a Bruno collection of 47 requests
 - Frontend delivers a clean, usable interface with minimal styling as per requirements
 - All external libraries and AI usage clearly attributed
-- Known limitations acknowledged - testing section to be completed, some improvements identified for future development
+- Known limitations acknowledged, with improvements identified for future development
 
 ---
 
@@ -1187,11 +1187,11 @@ From the project root folder, run:
 docker compose up -d
 ```
 
-This starts four containers:
+This starts three containers:
 
 - `deloitteedge-mongodb` - MongoDB database on port `27017`
 - `deloitteedge-backend` - NestJS REST API on port `3000`
-- `deloitteedge-frontend` - Angular app served via nginx on port `4200`
+- `deloitteedge-frontend` - Angular app served via nginx on port `8080`
 
 ---
 
